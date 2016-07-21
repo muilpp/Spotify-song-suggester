@@ -45,7 +45,7 @@ public class SuggestTest {
     Suggest suggest = new Suggest();
 
     Token token;
-    
+
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);

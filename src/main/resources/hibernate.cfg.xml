@@ -16,5 +16,7 @@
         <property name="c3p0.max_size">20</property>
         <property name="c3p0.timeout">1800</property>
         <property name="c3p0.max_statements">50</property>
+        <property name="c3p0.idle_test_period">14400</property> 
+        <property name="c3p0.preferredTestQuery">select 1;</property>
     </session-factory>
-</hibernate-configuration>  
+</hibernate-configuration>
