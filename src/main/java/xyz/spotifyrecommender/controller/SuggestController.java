@@ -31,7 +31,6 @@ public class SuggestController {
 
     @RequestMapping(value = "/{authorizationCode}", method = RequestMethod.GET)
     public RecommendationDTO getSuggestions(@PathVariable("authorizationCode") String authorizationCode) {
-
         Token authToken = spotifyAPI.requestToken(authorizationCode);
         String userName = spotifyAPI.getUserId(authToken.getAccessToken());
 

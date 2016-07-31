@@ -25,7 +25,7 @@
     </beans:bean>
 
     <task:annotation-driven />
-    <beans:bean id="execute" class="xyz.spotifyrecommender.model.UserSongsJob"></beans:bean>
+    <beans:bean id="execute" class="xyz.spotifyrecommender.controller.UserSongsJob"></beans:bean>
 
     <context:component-scan base-package="xyz.spotifyrecommender.model" />
     <context:component-scan base-package="xyz.spotifyrecommender.controller" />

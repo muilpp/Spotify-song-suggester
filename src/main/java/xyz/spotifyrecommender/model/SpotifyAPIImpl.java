@@ -50,6 +50,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.google.common.collect.Lists;
 
+import xyz.spotifyrecommender.model.interceptor.BearerHeaderInterceptor;
 import xyz.spotifyrecommender.model.webservice_data.PlaylistDTO;
 import xyz.spotifyrecommender.model.webservice_data.PlaylistItem;
 import xyz.spotifyrecommender.model.webservice_data.RecommendationDTO;
@@ -99,6 +100,7 @@ public class SpotifyAPIImpl implements SpotifyAPI {
     public PlaylistDTO getUserPlaylists(String bearer) {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getInterceptors().add(new BearerHeaderInterceptor(bearer));
+//        restTemplate.getInterceptors().add(new LoggingRequestInterceptor());
 
         ResponseEntity<PlaylistDTO> response = restTemplate.getForEntity(buildURIToGetUserPlaylists(), PlaylistDTO.class);
 
@@ -135,12 +137,11 @@ public class SpotifyAPIImpl implements SpotifyAPI {
         restTemplate.getInterceptors().add(new BearerHeaderInterceptor(bearer));
 
         PlaylistItem playlist = new PlaylistItem(PLAYLIST_NAME, true);
-        ResponseEntity<String> response = restTemplate.postForEntity(buildURIToCreatePlaylist(userId), playlist, String.class);
+        ResponseEntity<PlaylistItem> response = restTemplate.postForEntity(buildURIToCreatePlaylist(userId), playlist, PlaylistItem.class);
 
         if (response.getStatusCode() == HttpStatus.CREATED)
-            return response.getBody();
+            return response.getBody().getPlaylistId();
         else {
-            LOGGER.info("Failed : HTTP error code -> " + response.getStatusCodeValue());
             LOGGER.info(response.getStatusCode().getReasonPhrase());
         }
 
@@ -284,7 +285,7 @@ public class SpotifyAPIImpl implements SpotifyAPI {
             Future<Set<Track>> submit = executor.submit(worker);
             workerRecommendations.add(submit);
         }
-        
+
         executor.shutdown();
 
         try {

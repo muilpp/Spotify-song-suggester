@@ -8,9 +8,9 @@ public interface Constant {
     public final static String MARKET = "market=US";
     public final static String LIMIT = "limit";
     public final static int MAX_SONGS_TO_ADD_PER_REQUEST = 100;
-    public final static int DEFAULT_TOP_TRACKS_LIMIT = 10;
-    public final static String DEFAULT_RECS_LIMIT = "50";
-    public final static int STEP_SIZE_FOR_RECS = 2;
+    public final static int DEFAULT_TOP_TRACKS_LIMIT = 30;
+    public final static String DEFAULT_RECS_LIMIT = "25";
+    public final static int STEP_SIZE_FOR_RECS = 3;
     public final static String PLAYLIST_NAME = "Weekly Suggestions";
     public final static String SPOTIFY_TRACK = "spotify:track:";
     public final static String AUTHORIZATION_CODE = "authorization_code";

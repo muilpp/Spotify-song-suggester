@@ -9,6 +9,7 @@ public class PlaylistItem {
     private String playlistName;
     private String playlistId;
     private boolean isPublic;
+    private PlaylistTrack playListTracks;
 
     public PlaylistItem() {}
 
@@ -41,5 +42,15 @@ public class PlaylistItem {
     }
     public void setPublic(boolean isPublic) {
         this.isPublic = isPublic;
+    }
+ 
+    @JsonIgnore
+    public PlaylistTrack getPlayListTracks() {
+        return playListTracks;
+    }
+
+    @JsonProperty("tracks")
+    public void setPlayListTracks(PlaylistTrack playListTracks) {
+        this.playListTracks = playListTracks;
     }
 }

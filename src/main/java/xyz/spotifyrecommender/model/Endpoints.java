@@ -20,7 +20,7 @@ public final class Endpoints {
     private Endpoints() {}
 
     public static String buildURIForTopTracks() {
-        return BASE_URL + TOP_TRACKS_EP + "?" + Constant.TIME_RANGE + "=" + TimeRange.medium_term + "&" + LIMIT + "=" + Integer.toString(DEFAULT_TOP_TRACKS_LIMIT);
+        return BASE_URL + TOP_TRACKS_EP + "?" + Constant.TIME_RANGE + "=" + TimeRange.short_term + "&" + LIMIT + "=" + Integer.toString(DEFAULT_TOP_TRACKS_LIMIT);
     }
 
     public static String buildURIForRecommendations(String songIds) {
