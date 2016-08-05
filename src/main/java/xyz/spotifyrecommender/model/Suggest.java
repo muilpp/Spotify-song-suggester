@@ -34,7 +34,10 @@ public class Suggest {
         List<Item> itemList = shortTermTracks.getItemList();
 
         if (itemList == null || itemList.isEmpty())
+        {
+            LOGGER.info(NOT_ENOUGH_DATA_FOR_RECOMMENDATIONS);
             return new RecommendationDTO(false, NOT_ENOUGH_DATA_FOR_RECOMMENDATIONS);
+        }
 
         List<String> songIdList = getListByStepSize(itemList);
 
@@ -45,14 +48,18 @@ public class Suggest {
             // Create playlist for the first time
             playlistId = spotifyApi.createPlaylist(authToken.getAccessToken(), userId);
 
-            if (Strings.isNullOrEmpty(playlistId))
+            if (Strings.isNullOrEmpty(playlistId)) {
+                LOGGER.info(COULD_NOT_GET_RECOMMENDATIONS);
                 return new RecommendationDTO(false, COULD_NOT_GET_RECOMMENDATIONS);
+            }
         }
 
         RecommendationDTO recs = spotifyApi.getRecommendations(authToken.getAccessToken(), songIdList);
 
-        if (recs.getTrackSet().isEmpty())
+        if (recs.getTrackSet().isEmpty()) {
+            LOGGER.info(COULD_NOT_GET_RECOMMENDATIONS);            
             return new RecommendationDTO(false, COULD_NOT_GET_RECOMMENDATIONS);
+        }
         else {
             List<TrackURI> trackURIList = spotifyApi.createUriTrackList(recs);
 

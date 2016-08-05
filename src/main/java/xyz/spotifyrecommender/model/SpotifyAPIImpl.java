@@ -324,7 +324,7 @@ public class SpotifyAPIImpl implements SpotifyAPI {
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.getInterceptors().add(new BearerHeaderInterceptor(accessToken));
 
-            LOGGER.info("URI -> " + buildURIForRecommendations(songId.replace("[", "").replace("]", "")));
+//            LOGGER.info("URI -> " + buildURIForRecommendations(songId.replace("[", "").replace("]", "")));
             ResponseEntity<RecommendationDTO> response = restTemplate.getForEntity(buildURIForRecommendations(songId.replace("[", "").replace("]", "")), RecommendationDTO.class);
 
             if (response.getStatusCode() == HttpStatus.OK) {
