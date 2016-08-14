@@ -16,6 +16,8 @@ public interface Constant {
     public final static String AUTHORIZATION_CODE = "authorization_code";
     public final static String REDIRECT_URI = "http://www.spotifyrecommender.xyz";
     public final static int MAX_TIME_TO_WAIT_IN_SECS = 5;
+    public final static String DEFAULT_ACCESS_REVOKED = "0";
+    public final static String USER_ACCESS_REVOKED = "1";
 
 //    Webservice params keys
     public final static String REFRESH_TOKEN_KEY = "refresh_token";

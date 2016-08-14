@@ -32,6 +32,14 @@ public interface UserDAO {
     public boolean updateUserAccessToken(String userName, String oldToken, String newToken);
 
     /**
+     * Method to UPDATE the user status to revoked
+     * 
+     * @param userName
+     * @return true if user updated, false otherwise
+     */
+    public boolean updateUserAccess(String userName, String accesRevoked);
+    
+    /**
      * Method to DELETE an employee from the records
      * 
      * @param userName

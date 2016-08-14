@@ -7,6 +7,8 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 
+import com.google.common.base.Strings;
+
 import xyz.spotifyrecommender.model.SpotifyAPI;
 import xyz.spotifyrecommender.model.Suggest;
 import xyz.spotifyrecommender.model.database.User;
@@ -32,8 +34,10 @@ public class UserSongsJob {
 
         for (User user : userList) {
             LOGGER.info("automatic update for user -> " + user.getUserName());
-            Token userToken = spotifyAPI.refreshToken(user.getRefreshToken());
-            suggest.getRecommendations(userToken);
+            Token userToken = spotifyAPI.refreshToken(user.getUserName(), user.getRefreshToken());
+            
+            if (!Strings.isNullOrEmpty(userToken.getAccessToken()))
+            	suggest.getRecommendations(userToken);
 
             try {
                 // wait 10s between each user

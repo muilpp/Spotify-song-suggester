@@ -1,5 +1,6 @@
 package xyz.spotifyrecommender.model;
 
+import static xyz.spotifyrecommender.model.Constant.USER_ACCESS_REVOKED;
 import static xyz.spotifyrecommender.model.Constant.AUTHORIZATION_CODE;
 import static xyz.spotifyrecommender.model.Constant.CLIENT_ID;
 import static xyz.spotifyrecommender.model.Constant.CLIENT_ID_KEY;
@@ -39,6 +40,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -50,6 +52,8 @@ import org.springframework.web.client.RestTemplate;
 
 import com.google.common.collect.Lists;
 
+import xyz.spotifyrecommender.model.database.UserDAO;
+import xyz.spotifyrecommender.model.error_handler.ErrorHandlerAccessRevoked;
 import xyz.spotifyrecommender.model.interceptor.BearerHeaderInterceptor;
 import xyz.spotifyrecommender.model.webservice_data.PlaylistDTO;
 import xyz.spotifyrecommender.model.webservice_data.PlaylistItem;
@@ -65,6 +69,9 @@ import xyz.spotifyrecommender.model.webservice_data.UserProfileDTO;
 public class SpotifyAPIImpl implements SpotifyAPI {
 
     private final static Logger LOGGER = Logger.getLogger(SpotifyAPIImpl.class.getName());
+
+    @Autowired
+    private UserDAO userDAO;
 
     @Override
     public TopShortTermTracksDTO getTopTracks(String bearer) {
@@ -235,9 +242,10 @@ public class SpotifyAPIImpl implements SpotifyAPI {
     }
 
     @Override
-    public Token refreshToken(String refreshToken) {
+    public Token refreshToken(String userName, String refreshToken) {
         RestTemplate restTemplate = new RestTemplate();
-        
+        restTemplate.setErrorHandler(new ErrorHandlerAccessRevoked());
+
         MultiValueMap<String, String> authData = new LinkedMultiValueMap<>();
         authData.add(GRANT_TYPE_KEY, REFRESH_TOKEN_KEY);
         authData.add(REFRESH_TOKEN_KEY, refreshToken);
@@ -251,6 +259,7 @@ public class SpotifyAPIImpl implements SpotifyAPI {
         } else {
             LOGGER.info("Failed : HTTP error code -> " + response.getStatusCodeValue());
             LOGGER.info(response.getStatusCode().getReasonPhrase());
+            userDAO.updateUserAccess(userName, USER_ACCESS_REVOKED);
         }
 
         return new Token();

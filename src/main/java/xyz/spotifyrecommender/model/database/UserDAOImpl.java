@@ -1,5 +1,6 @@
 package xyz.spotifyrecommender.model.database;
 
+import static xyz.spotifyrecommender.model.Constant.DEFAULT_ACCESS_REVOKED;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,7 +22,7 @@ public class UserDAOImpl implements UserDAO {
         Integer userID = 0;
         try {
             tx = session.beginTransaction();
-            User user = new User(userName, accessToken, refreshToken);
+            User user = new User(userName, accessToken, refreshToken, DEFAULT_ACCESS_REVOKED);
             userID = (Integer) session.save(user);
             tx.commit();
         } catch (HibernateException e) {
@@ -51,7 +52,7 @@ public class UserDAOImpl implements UserDAO {
     public List<User> getUsers() {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        return (List<User>) session.createQuery("from User ").list();
+        return (List<User>) session.createQuery("from User where access_revoked != '1'").list();
     }
 
     @Override
@@ -71,6 +72,24 @@ public class UserDAOImpl implements UserDAO {
         return rowCount > 0;
     }
 
+	@Override
+	public boolean updateUserAccess(String userName, String accesRevoked) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        session.getTransaction().begin();
+
+        Query query = session
+                .createQuery("update User set access_revoked = :accesRevoked where user_name = :userName");
+        query.setParameter("accesRevoked", accesRevoked);
+        query.setParameter("userName", userName);
+
+        int rowCount = query.executeUpdate();
+        LOGGER.info("Updated -> " + rowCount);
+        session.getTransaction().commit();
+
+        return rowCount > 0;
+	}
+
+    
     @Override
     public boolean deleteUser(String userName) {
         Session session = HibernateUtil.getSessionFactory().openSession();

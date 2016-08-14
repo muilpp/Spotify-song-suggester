@@ -24,15 +24,19 @@ public class User {
     @Column(name = "refresh_token")
     private String refreshToken;
 
+    @Column(name = "access_revoked")
+    private String accessRevoked;
+    
     public User() {}
 
-    public User(String userName, String accessToken, String refreshToken) {
+    public User(String userName, String accessToken, String refreshToken, String accessRevoked) {
         this.userName = userName;
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
+        this.accessRevoked = accessRevoked;
     }
 
-    public int getId() {
+	public int getId() {
         return id;
     }
     public void setId(int id) {
@@ -59,4 +63,13 @@ public class User {
     public void setRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
+
+    public String getAccessRevoked() {
+		return accessRevoked;
+	}
+
+	public void setAccessRevoked(String accessRevoked) {
+		this.accessRevoked = accessRevoked;
+	}
+
 }

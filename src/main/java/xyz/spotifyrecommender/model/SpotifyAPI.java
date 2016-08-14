@@ -26,10 +26,11 @@ public interface SpotifyAPI {
     
     /**
      * Request a new access token when the current one is expired
+     * @param userName
      * @param refreshToken
      * @return a new Token with the access if refreshToken works, empty Token otherwise
      */
-    public Token refreshToken(String refreshToken);
+    public Token refreshToken(String userName, String refreshToken);
     
     /**
      * Request the profile user name
