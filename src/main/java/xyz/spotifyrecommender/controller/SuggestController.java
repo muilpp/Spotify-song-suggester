@@ -1,5 +1,6 @@
 package xyz.spotifyrecommender.controller;
 
+import static xyz.spotifyrecommender.model.Constant.DEFAULT_ACCESS_REVOKED;
 import static xyz.spotifyrecommender.model.Constant.AUTHENTICATION_PROBLEM;
 
 import java.util.logging.Logger;
@@ -39,7 +40,7 @@ public class SuggestController {
 
         if (Strings.isNullOrEmpty(authToken.getAccessToken()))
             return new RecommendationDTO(false, AUTHENTICATION_PROBLEM);
-            
+
         String userName = spotifyAPI.getUserId(authToken.getAccessToken());
 
         if (Strings.isNullOrEmpty(userName))
@@ -47,6 +48,8 @@ public class SuggestController {
 
         if (!userDAO.userExists(userName))
             userDAO.addUser(userName, authToken.getAccessToken(), authToken.getRefreshToken());
+        else
+        	userDAO.updateUserAccess(userName, DEFAULT_ACCESS_REVOKED);
 
         LOGGER.info("User " + userName + " genera una llista nova");
 

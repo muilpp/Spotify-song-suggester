@@ -59,17 +59,14 @@ public class Suggest {
         if (recs.getTrackSet().isEmpty()) {
             LOGGER.info(COULD_NOT_GET_RECOMMENDATIONS);            
             return new RecommendationDTO(false, COULD_NOT_GET_RECOMMENDATIONS);
-        }
-        else {
+        } else {
             List<TrackURI> trackURIList = spotifyApi.createUriTrackList(recs);
-
             int addedSongsCount = 0;
 
             // First chunk replaces the old songs
             if (trackURIList.size() > 0)
                 addedSongsCount += spotifyApi.replaceOldSongsInPlaylist(authToken.getAccessToken(), userId, playlistId,
                         trackURIList.get(0));
-
             // If there're still songs to be added, add them normally
             if (trackURIList.size() > 1) {
                 for (int i = 1; i < trackURIList.size(); i++) {

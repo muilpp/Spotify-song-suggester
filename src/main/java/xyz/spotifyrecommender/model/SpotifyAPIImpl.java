@@ -54,6 +54,7 @@ import com.google.common.collect.Lists;
 
 import xyz.spotifyrecommender.model.database.UserDAO;
 import xyz.spotifyrecommender.model.error_handler.ErrorHandlerAccessRevoked;
+import xyz.spotifyrecommender.model.error_handler.ErrorHandlerGeneral;
 import xyz.spotifyrecommender.model.interceptor.BearerHeaderInterceptor;
 import xyz.spotifyrecommender.model.webservice_data.PlaylistDTO;
 import xyz.spotifyrecommender.model.webservice_data.PlaylistItem;
@@ -77,15 +78,12 @@ public class SpotifyAPIImpl implements SpotifyAPI {
     public TopShortTermTracksDTO getTopTracks(String bearer) {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getInterceptors().add(new BearerHeaderInterceptor(bearer));
+        restTemplate.setErrorHandler(new ErrorHandlerGeneral());
 
         ResponseEntity<TopShortTermTracksDTO> response = restTemplate.getForEntity(buildURIForTopTracks(), TopShortTermTracksDTO.class);
 
         if (response.getStatusCode() == HttpStatus.OK)
             return response.getBody();
-        else {
-            LOGGER.info("Failed : HTTP error code -> " + response.getStatusCodeValue());
-            LOGGER.info(response.getStatusCode().getReasonPhrase());
-        }
 
         return new TopShortTermTracksDTO();
     }
@@ -106,6 +104,7 @@ public class SpotifyAPIImpl implements SpotifyAPI {
     @Override
     public PlaylistDTO getUserPlaylists(String bearer) {
         RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setErrorHandler(new ErrorHandlerGeneral());
         restTemplate.getInterceptors().add(new BearerHeaderInterceptor(bearer));
 //        restTemplate.getInterceptors().add(new LoggingRequestInterceptor());
 
@@ -113,10 +112,6 @@ public class SpotifyAPIImpl implements SpotifyAPI {
 
         if (response.getStatusCode() == HttpStatus.OK)
             return response.getBody();
-        else {
-            LOGGER.info("Failed : HTTP error code -> " + response.getStatusCodeValue());
-            LOGGER.info(response.getStatusCode().getReasonPhrase());
-        }
 
         return new PlaylistDTO();
     }
@@ -124,16 +119,13 @@ public class SpotifyAPIImpl implements SpotifyAPI {
     @Override
     public String getUserId(String bearer) {
         RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setErrorHandler(new ErrorHandlerGeneral());
         restTemplate.getInterceptors().add(new BearerHeaderInterceptor(bearer));
 
         ResponseEntity<UserProfileDTO> response = restTemplate.getForEntity(buildURIToGetUserProfile(), UserProfileDTO.class);
 
         if (response.getStatusCode() == HttpStatus.OK)
             return response.getBody().getUserId();
-        else {
-            LOGGER.info("Failed : HTTP error code -> " + response.getStatusCodeValue());
-            LOGGER.info(response.getStatusCode().getReasonPhrase());
-        }
 
         return null;
     }
@@ -141,6 +133,7 @@ public class SpotifyAPIImpl implements SpotifyAPI {
     @Override
     public String createPlaylist(String bearer, String userId) {
         RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setErrorHandler(new ErrorHandlerGeneral());
         restTemplate.getInterceptors().add(new BearerHeaderInterceptor(bearer));
 
         PlaylistItem playlist = new PlaylistItem(PLAYLIST_NAME, true);
@@ -148,9 +141,6 @@ public class SpotifyAPIImpl implements SpotifyAPI {
 
         if (response.getStatusCode() == HttpStatus.CREATED)
             return response.getBody().getPlaylistId();
-        else {
-            LOGGER.info(response.getStatusCode().getReasonPhrase());
-        }
 
         return null;
     }
@@ -158,33 +148,28 @@ public class SpotifyAPIImpl implements SpotifyAPI {
     @Override
     public int replaceOldSongsInPlaylist(String bearer, String userId, String playlistId, TrackURI trackURI) {
         RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setErrorHandler(new ErrorHandlerGeneral());
         restTemplate.getInterceptors().add(new BearerHeaderInterceptor(bearer));
 
         HttpEntity<TrackURI> trackEntity = new HttpEntity<>(trackURI);
-        ResponseEntity<Integer> response = restTemplate.exchange(buildURIToReplaceOldSongs(userId, playlistId), HttpMethod.PUT, trackEntity, Integer.class);
+        ResponseEntity<String> response = restTemplate.exchange(buildURIToReplaceOldSongs(userId, playlistId), HttpMethod.PUT, trackEntity, String.class);
 
-        if (response.getStatusCode() == HttpStatus.CREATED)
-            return trackURI.getURISet().size();
-        else {
-            LOGGER.info( "Failed : HTTP error code : " + response.getStatusCodeValue());
-            LOGGER.info(response.getStatusCode().getReasonPhrase());
+        if (response.getStatusCode() == HttpStatus.CREATED) {
+        	return trackURI.getURISet().size();
         }
 
         return 0;
     }
-
+    
     @Override
     public int addNewSongsToPlaylist(String bearer, String userId, String playlistId, TrackURI trackURI) {
         RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setErrorHandler(new ErrorHandlerGeneral());
         restTemplate.getInterceptors().add(new BearerHeaderInterceptor(bearer));
 
         ResponseEntity<String> response = restTemplate.postForEntity(buildURIToAddNewSongs(userId, playlistId), trackURI, String.class);
-        if (response.getStatusCode() == HttpStatus.CREATED) {
+        if (response.getStatusCode() == HttpStatus.CREATED)
             return trackURI.getURISet().size();
-        } else {
-            LOGGER.info("Failed : HTTP error code -> " + response.getStatusCodeValue());
-            LOGGER.info(response.getStatusCode().getReasonPhrase());
-        }
 
         return 0;
     }
@@ -222,6 +207,7 @@ public class SpotifyAPIImpl implements SpotifyAPI {
     @Override
     public Token requestToken(String authorizationCode) {
         RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setErrorHandler(new ErrorHandlerGeneral());
 
         MultiValueMap<String, String> authData = new LinkedMultiValueMap<>();
         authData.add(GRANT_TYPE_KEY, AUTHORIZATION_CODE);
@@ -231,12 +217,8 @@ public class SpotifyAPIImpl implements SpotifyAPI {
         authData.add(CLIENT_SECRET_KEY, CLIENT_SECRET);
         
         ResponseEntity<Token> response = restTemplate.postForEntity(buildURIToRequestToken(), authData, Token.class);
-        if (response.getStatusCode() == HttpStatus.OK) {
+        if (response.getStatusCode() == HttpStatus.OK)
             return response.getBody();
-        } else {
-            LOGGER.info("Failed : HTTP error code -> " + response.getStatusCodeValue());
-            LOGGER.info(response.getStatusCode().getReasonPhrase());
-        }
 
         return new Token();
     }
@@ -268,15 +250,12 @@ public class SpotifyAPIImpl implements SpotifyAPI {
     @Override
     public String getSpotifyUserName(String bearer) {
         RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setErrorHandler(new ErrorHandlerGeneral());
 
         ResponseEntity<UserProfile> response = restTemplate.getForEntity(buildURIToRequestUserProfileName(), UserProfile.class);
 
         if (response.getStatusCode() == HttpStatus.CREATED)
             return response.getBody().getId();
-        else {
-            LOGGER.info("Failed : HTTP error code -> " + response.getStatusCodeValue());
-            LOGGER.info(response.getStatusCode().getReasonPhrase());
-        }
 
         return null;
     }
