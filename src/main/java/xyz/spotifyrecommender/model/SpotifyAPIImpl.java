@@ -241,7 +241,9 @@ public class SpotifyAPIImpl implements SpotifyAPI {
         } else {
             LOGGER.info("Failed : HTTP error code -> " + response.getStatusCodeValue());
             LOGGER.info(response.getStatusCode().getReasonPhrase());
-            userDAO.updateUserAccess(userName, USER_ACCESS_REVOKED);
+
+            //user revoked access to his account, let's write it in the DB
+            userDAO.updateUserAccess(userName, USER_ACCESS_REVOKED, null, null);
         }
 
         return new Token();

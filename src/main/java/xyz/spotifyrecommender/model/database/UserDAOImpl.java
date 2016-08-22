@@ -72,12 +72,14 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	@Override
-	public boolean updateUserAccess(String userName, String accesRevoked) {
+	public boolean updateUserAccess(String userName, String accesRevoked, String newAccessToken, String newRefreshToken) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		session.getTransaction().begin();
 
-		Query query = session.createQuery("update User set access_revoked = :accesRevoked where user_name = :userName");
+		Query query = session.createQuery("update User set access_revoked = :accesRevoked, access_token = :newAccessToken, refresh_token = :newRefreshToken where user_name = :userName");
 		query.setParameter("accesRevoked", accesRevoked);
+		query.setParameter("newAccessToken", newAccessToken);
+		query.setParameter("newRefreshToken", newRefreshToken);
 		query.setParameter("userName", userName);
 
 		int rowCount = query.executeUpdate();

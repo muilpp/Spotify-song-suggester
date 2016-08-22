@@ -37,7 +37,7 @@ public interface UserDAO {
      * @param userName
      * @return true if user updated, false otherwise
      */
-    public boolean updateUserAccess(String userName, String accesRevoked);
+    public boolean updateUserAccess(String userName, String accesRevoked, String newAccessToken, String newRefreshToken);
     
     /**
      * Method to DELETE an employee from the records
