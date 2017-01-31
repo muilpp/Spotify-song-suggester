@@ -16,11 +16,12 @@ public interface UserDAO {
 
     /**
      * Method to GET a user from the database
+     * 
      * @param userName
      * @return true if the user exists, false otherwise
      */
     public boolean userExists(String userName);
-    
+
     /**
      * Method to UPDATE user token
      * 
@@ -37,8 +38,9 @@ public interface UserDAO {
      * @param userName
      * @return true if user updated, false otherwise
      */
-    public boolean updateUserAccess(String userName, String accesRevoked, String newAccessToken, String newRefreshToken);
-    
+    public boolean updateUserAccess(String userName, String accesRevoked, String newAccessToken,
+            String newRefreshToken);
+
     /**
      * Method to DELETE an employee from the records
      * 
@@ -49,7 +51,15 @@ public interface UserDAO {
 
     /**
      * Method to READ all users
+     * 
      * @return list of users in database
      */
     public List<User> getUsers();
+
+    /**
+     * Method to READ a specific users
+     * 
+     * @return list of users in database matching the userName parameter
+     */
+    public User getUser(String userName);
 }

@@ -44,5 +44,5 @@ public class RecommendationDTO {
 
     public void setSuccess(boolean success) {
         this.success = success;
-    }   
+    }
 }

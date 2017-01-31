@@ -33,20 +33,19 @@ public class Suggest {
 
         List<Item> itemList = shortTermTracks.getItemList();
 
-        if (itemList == null || itemList.isEmpty())
-        {
+        if (itemList == null || itemList.isEmpty()) {
             LOGGER.info(NOT_ENOUGH_DATA_FOR_RECOMMENDATIONS);
             return new RecommendationDTO(false, NOT_ENOUGH_DATA_FOR_RECOMMENDATIONS);
         }
 
         List<String> songIdList = getListByStepSize(itemList);
 
-        String playlistId = spotifyApi.getPlaylistId(authToken.getAccessToken());
+        String playlistId = spotifyApi.getPlaylistId();
         String userId = spotifyApi.getUserId(authToken.getAccessToken());
 
         if (Strings.isNullOrEmpty(playlistId)) {
             // Create playlist for the first time
-            playlistId = spotifyApi.createPlaylist(authToken.getAccessToken(), userId);
+            playlistId = spotifyApi.createPlaylist(userId);
 
             if (Strings.isNullOrEmpty(playlistId)) {
                 LOGGER.info(COULD_NOT_GET_RECOMMENDATIONS);
@@ -54,10 +53,10 @@ public class Suggest {
             }
         }
 
-        RecommendationDTO recs = spotifyApi.getRecommendations(authToken.getAccessToken(), songIdList);
+        RecommendationDTO recs = spotifyApi.getRecommendations(songIdList);
 
         if (recs.getTrackSet().isEmpty()) {
-            LOGGER.info(COULD_NOT_GET_RECOMMENDATIONS);            
+            LOGGER.info(COULD_NOT_GET_RECOMMENDATIONS);
             return new RecommendationDTO(false, COULD_NOT_GET_RECOMMENDATIONS);
         } else {
             List<TrackURI> trackURIList = spotifyApi.createUriTrackList(recs);
@@ -65,12 +64,12 @@ public class Suggest {
 
             // First chunk replaces the old songs
             if (trackURIList.size() > 0)
-                addedSongsCount += spotifyApi.replaceOldSongsInPlaylist(authToken.getAccessToken(), userId, playlistId,
+                addedSongsCount += spotifyApi.replaceOldSongsInPlaylist(userId, playlistId,
                         trackURIList.get(0));
             // If there're still songs to be added, add them normally
             if (trackURIList.size() > 1) {
                 for (int i = 1; i < trackURIList.size(); i++) {
-                    addedSongsCount += spotifyApi.addNewSongsToPlaylist(authToken.getAccessToken(), userId, playlistId,
+                    addedSongsCount += spotifyApi.addNewSongsToPlaylist(userId, playlistId,
                             trackURIList.get(i));
                 }
             }

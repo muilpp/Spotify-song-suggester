@@ -15,6 +15,7 @@ public class Track {
     public String getSongId() {
         return songId;
     }
+
     public void setSongId(String songId) {
         this.songId = songId;
     }
@@ -23,6 +24,7 @@ public class Track {
     public String getSongName() {
         return songName;
     }
+
     public void setSongName(String songName) {
         this.songName = songName;
     }
@@ -31,6 +33,7 @@ public class Track {
     public List<Artist> artistList() {
         return artistList;
     }
+
     public void setArtistList(List<Artist> artistList) {
         this.artistList = artistList;
     }

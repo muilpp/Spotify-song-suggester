@@ -15,6 +15,7 @@ public class Item {
     public List<Artist> artistList() {
         return artistList;
     }
+
     public void setArtistList(List<Artist> artistList) {
         this.artistList = artistList;
     }
@@ -23,6 +24,7 @@ public class Item {
     public String getSongId() {
         return songId;
     }
+
     public void setSongId(String id) {
         this.songId = id;
     }
@@ -31,6 +33,7 @@ public class Item {
     public String getSongName() {
         return songName;
     }
+
     public void setSongName(String songName) {
         this.songName = songName;
     }

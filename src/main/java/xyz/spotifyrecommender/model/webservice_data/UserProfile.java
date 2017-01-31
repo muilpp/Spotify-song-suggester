@@ -9,6 +9,7 @@ public class UserProfile {
     public String getUri() {
         return uri;
     }
+
     public void setUri(String uri) {
         this.uri = uri;
     }
@@ -16,6 +17,7 @@ public class UserProfile {
     public String getHref() {
         return href;
     }
+
     public void setHref(String href) {
         this.href = href;
     }
@@ -23,6 +25,7 @@ public class UserProfile {
     public String getId() {
         return id;
     }
+
     public void setId(String id) {
         this.id = id;
     }

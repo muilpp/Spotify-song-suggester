@@ -17,14 +17,17 @@ public final class Endpoints {
     public final static String REQUEST_TOKEN_EP = "https://accounts.spotify.com/api/token";
     public final static String REQUEST_USER_PROFILE = "https://api.spotify.com/v1/me/";
 
-    private Endpoints() {}
+    private Endpoints() {
+    }
 
     public static String buildURIForTopTracks() {
-        return BASE_URL + TOP_TRACKS_EP + "?" + Constant.TIME_RANGE + "=" + TimeRange.short_term + "&" + LIMIT + "=" + Integer.toString(DEFAULT_TOP_TRACKS_LIMIT);
+        return BASE_URL + TOP_TRACKS_EP + "?" + Constant.TIME_RANGE + "=" + TimeRange.short_term + "&" + LIMIT + "="
+                + Integer.toString(DEFAULT_TOP_TRACKS_LIMIT);
     }
 
     public static String buildURIForRecommendations(String songIds) {
-        return BASE_URL + RECOMMENDATIONS_EP + "?" + Constant.SEED_TRACKS + "=" + songIds + "&" + MARKET + "&" + LIMIT + "=" + DEFAULT_RECS_LIMIT;
+        return BASE_URL + RECOMMENDATIONS_EP + "?" + Constant.SEED_TRACKS + "=" + songIds + "&" + MARKET + "&" + LIMIT
+                + "=" + DEFAULT_RECS_LIMIT;
     }
 
     public static String buildURIToGetUserPlaylists() {
@@ -42,11 +45,11 @@ public final class Endpoints {
     public static String buildURIToReplaceOldSongs(String userId, String playlistId) {
         return BASE_URL + REPLACE_SONGS_IN_PLAYLIST_EP.replace("{userId}", userId).replace("{playlistId}", playlistId);
     }
-    
+
     public static String buildURIToAddNewSongs(String userId, String playlistId) {
         return BASE_URL + ADD_SONGS_IN_PLAYLIST_EP.replace("{userId}", userId).replace("{playlistId}", playlistId);
     }
-    
+
     public static String buildURIToRequestToken() {
         return REQUEST_TOKEN_EP;
     }

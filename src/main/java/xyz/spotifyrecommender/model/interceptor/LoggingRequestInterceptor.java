@@ -13,11 +13,12 @@ public class LoggingRequestInterceptor implements ClientHttpRequestInterceptor {
     private static final Logger log = Logger.getLogger(LoggingRequestInterceptor.class.getName());
 
     @Override
-    public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
+    public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
+            throws IOException {
 
         ClientHttpResponse response = execution.execute(request, body);
 
-        log(request,body,response);
+        // log(request,body,response);
 
         return response;
     }

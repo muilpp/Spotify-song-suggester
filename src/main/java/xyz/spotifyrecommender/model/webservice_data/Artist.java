@@ -16,7 +16,7 @@ public class Artist {
     public void setArtistId(String artistId) {
         this.artistId = artistId;
     }
-    
+
     @JsonProperty("name")
     public String getArtistName() {
         return artistName;

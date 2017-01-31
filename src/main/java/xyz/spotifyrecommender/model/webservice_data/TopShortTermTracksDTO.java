@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TopShortTermTracksDTO {
     private List<Item> itemsList;
-    
+
     public TopShortTermTracksDTO() {
         itemsList = new ArrayList<>();
     }
@@ -18,6 +18,7 @@ public class TopShortTermTracksDTO {
     public List<Item> getItemList() {
         return itemsList;
     }
+
     public void setItemList(List<Item> itemList) {
         this.itemsList = itemList;
     }

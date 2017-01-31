@@ -11,7 +11,7 @@ import javax.persistence.Table;
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private int id;
 
@@ -26,8 +26,9 @@ public class User {
 
     @Column(name = "access_revoked")
     private String accessRevoked;
-    
-    public User() {}
+
+    public User() {
+    }
 
     public User(String userName, String accessToken, String refreshToken, String accessRevoked) {
         this.userName = userName;
@@ -36,9 +37,10 @@ public class User {
         this.accessRevoked = accessRevoked;
     }
 
-	public int getId() {
+    public int getId() {
         return id;
     }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -46,6 +48,7 @@ public class User {
     public String getUserName() {
         return userName;
     }
+
     public void setUserName(String userName) {
         this.userName = userName;
     }
@@ -53,6 +56,7 @@ public class User {
     public String getAccessToken() {
         return accessToken;
     }
+
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
     }
@@ -60,16 +64,17 @@ public class User {
     public String getRefreshToken() {
         return refreshToken;
     }
+
     public void setRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
 
     public String getAccessRevoked() {
-		return accessRevoked;
-	}
+        return accessRevoked;
+    }
 
-	public void setAccessRevoked(String accessRevoked) {
-		this.accessRevoked = accessRevoked;
-	}
+    public void setAccessRevoked(String accessRevoked) {
+        this.accessRevoked = accessRevoked;
+    }
 
 }

@@ -59,7 +59,7 @@ public class SuggestTest {
         topTracksDTO.setItemList(itemList);
         doReturn(topTracksDTO).when(spotifyAPI).getTopTracks(anyString());
 
-        doReturn("testPlaylist").when(spotifyAPI).getPlaylistId(anyString());
+        doReturn("testPlaylist").when(spotifyAPI).getPlaylistId();
         doReturn("testUserId").when(spotifyAPI).getUserId(anyString());
 
         RecommendationDTO recs = new RecommendationDTO();
@@ -68,7 +68,7 @@ public class SuggestTest {
         Set<Track> set = new HashSet<>();
         set.add(track);
         recs.setTrackList(set);
-        doReturn(recs).when(spotifyAPI).getRecommendations(anyString(), anyList());
+        doReturn(recs).when(spotifyAPI).getRecommendations(anyList());
     }
 
     @Test
@@ -84,14 +84,14 @@ public class SuggestTest {
 
     @Test
     public void noRecommendationsIfPlaylistIsNotCreated() {
-        doReturn(null).when(spotifyAPI).getPlaylistId(anyString());
-        doReturn(null).when(spotifyAPI).createPlaylist(anyString(), anyString());
+        doReturn(null).when(spotifyAPI).getPlaylistId();
+        doReturn(null).when(spotifyAPI).createPlaylist(anyString());
 
         RecommendationDTO recommendations = suggest.getRecommendations(token);
 
-        verify(spotifyAPI, times(1)).getPlaylistId(anyString());
+        verify(spotifyAPI, times(1)).getPlaylistId();
         verify(spotifyAPI, times(1)).getUserId(anyString());
-        verify(spotifyAPI, times(1)).createPlaylist(anyString(), anyString());
+        verify(spotifyAPI, times(1)).createPlaylist(anyString());
 
         assertThat(recommendations.isSuccess(), equalTo(false));
         assertThat(recommendations.getMessage(), equalTo(COULD_NOT_GET_RECOMMENDATIONS));
@@ -100,7 +100,8 @@ public class SuggestTest {
     @Test
     public void songsAreReplacedIfOldSongsStillPresent() {
         doReturn(Arrays.asList(new TrackURI())).when(spotifyAPI).createUriTrackList(any(RecommendationDTO.class));
-        doReturn(3).when(spotifyAPI).replaceOldSongsInPlaylist(anyString(), anyString(), anyString(), any(TrackURI.class));
+        doReturn(3).when(spotifyAPI).replaceOldSongsInPlaylist(anyString(), anyString(),
+                any(TrackURI.class));
 
         RecommendationDTO recommendations = suggest.getRecommendations(token);
 
@@ -110,8 +111,10 @@ public class SuggestTest {
 
     @Test
     public void songsAreAddedIfNewSongsAlreadyPresent() {
-        doReturn(Arrays.asList(new TrackURI(), new TrackURI())).when(spotifyAPI).createUriTrackList(any(RecommendationDTO.class));
-        doReturn(4).when(spotifyAPI).replaceOldSongsInPlaylist(anyString(), anyString(), anyString(), any(TrackURI.class));
+        doReturn(Arrays.asList(new TrackURI(), new TrackURI())).when(spotifyAPI)
+                .createUriTrackList(any(RecommendationDTO.class));
+        doReturn(4).when(spotifyAPI).replaceOldSongsInPlaylist(anyString(), anyString(),
+                any(TrackURI.class));
 
         RecommendationDTO recommendations = suggest.getRecommendations(token);
 
@@ -123,14 +126,14 @@ public class SuggestTest {
     @Test
     public void noRecommendationsIfSpotifyGivesNoRecommendations() {
         RecommendationDTO recs = new RecommendationDTO();
-        recs.setTrackList(Collections.<Track>emptySet());
-        doReturn(recs).when(spotifyAPI).getRecommendations(anyString(), anyList());
+        recs.setTrackList(Collections.<Track> emptySet());
+        doReturn(recs).when(spotifyAPI).getRecommendations(anyList());
 
         RecommendationDTO recommendations = suggest.getRecommendations(token);
 
-        verify(spotifyAPI, times(1)).getRecommendations(anyString(), anyList());
+        verify(spotifyAPI, times(1)).getRecommendations(anyList());
         assertThat(recommendations.isSuccess(), equalTo(false));
-        assertThat(recommendations.getMessage(), equalTo(COULD_NOT_GET_RECOMMENDATIONS));        
+        assertThat(recommendations.getMessage(), equalTo(COULD_NOT_GET_RECOMMENDATIONS));
     }
 
     @Test
@@ -152,9 +155,9 @@ public class SuggestTest {
     private void createItemList(List<Item> itemList) {
         Item item = new Item();
 
-        for (int i = 0; i<12; i++) {
-            item.setSongId("testId"+i);
-            item.setSongName("testName"+i);
+        for (int i = 0; i < 12; i++) {
+            item.setSongId("testId" + i);
+            item.setSongName("testName" + i);
             itemList.add(item);
 
             item = new Item();

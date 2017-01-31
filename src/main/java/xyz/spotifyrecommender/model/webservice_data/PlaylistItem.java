@@ -11,7 +11,8 @@ public class PlaylistItem {
     private boolean isPublic;
     private PlaylistTrack playListTracks;
 
-    public PlaylistItem() {}
+    public PlaylistItem() {
+    }
 
     public PlaylistItem(String name, boolean isPublic) {
         playlistName = name;
@@ -22,15 +23,18 @@ public class PlaylistItem {
     public String getPlaylistName() {
         return playlistName;
     }
+
     public void setPlaylistName(String playlistName) {
         this.playlistName = playlistName;
     }
 
-    //This is to prevent serialization of playlistId, since it will only be deserialized, always.
+    // This is to prevent serialization of playlistId, since it will only be
+    // deserialized, always.
     @JsonIgnore
     public String getPlaylistId() {
         return playlistId;
     }
+
     @JsonProperty("id")
     public void setPlaylistId(String playlistId) {
         this.playlistId = playlistId;
@@ -40,10 +44,11 @@ public class PlaylistItem {
     public boolean isPublic() {
         return isPublic;
     }
+
     public void setPublic(boolean isPublic) {
         this.isPublic = isPublic;
     }
- 
+
     @JsonIgnore
     public PlaylistTrack getPlayListTracks() {
         return playListTracks;

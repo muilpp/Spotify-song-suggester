@@ -13,7 +13,7 @@ public class TrackURI {
     public TrackURI() {
         uriSet = new HashSet<>();
     }
-    
+
     @JsonProperty("uris")
     public Set<String> getURISet() {
         return uriSet;

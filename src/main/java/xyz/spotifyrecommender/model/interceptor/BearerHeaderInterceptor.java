@@ -8,7 +8,7 @@ import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 
-public class BearerHeaderInterceptor implements ClientHttpRequestInterceptor{
+public class BearerHeaderInterceptor implements ClientHttpRequestInterceptor {
     private final String bearer;
 
     public BearerHeaderInterceptor(String bearer) {

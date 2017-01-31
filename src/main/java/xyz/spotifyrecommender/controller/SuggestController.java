@@ -49,7 +49,8 @@ public class SuggestController {
         if (!userDAO.userExists(userName))
             userDAO.addUser(userName, authToken.getAccessToken(), authToken.getRefreshToken());
         else
-        	userDAO.updateUserAccess(userName, DEFAULT_ACCESS_REVOKED, authToken.getAccessToken(), authToken.getRefreshToken());
+            userDAO.updateUserAccess(userName, DEFAULT_ACCESS_REVOKED, authToken.getAccessToken(),
+                    authToken.getRefreshToken());
 
         LOGGER.info("User " + userName + " genera una llista nova");
 

@@ -27,7 +27,7 @@ public class UserSongsJob {
     @Autowired
     Suggest suggest;
 
-    @Scheduled(cron="0 0 1 * * MON")
+    @Scheduled(cron = "0 50 8 * * SUN")
     public void execute() {
         List<User> userList = userDAO.getUsers();
         LOGGER.info("execute job, user list size -> " + userList.size());
@@ -35,9 +35,9 @@ public class UserSongsJob {
         for (User user : userList) {
             LOGGER.info("automatic update for user -> " + user.getUserName());
             Token userToken = spotifyAPI.refreshToken(user.getUserName(), user.getRefreshToken());
-            
+
             if (!Strings.isNullOrEmpty(userToken.getAccessToken()))
-            	suggest.getRecommendations(userToken);
+                suggest.getRecommendations(userToken);
 
             try {
                 // wait 10s between each user
@@ -48,9 +48,20 @@ public class UserSongsJob {
         }
     }
 
-    @Scheduled(cron="0 0 */3 * * *")
+//    @Scheduled(cron = "0 18 12 * * *")
+//    public void executeSpecificUser() {
+//        User user = userDAO.getUser("");
+//        LOGGER.info("execute specific user update for user -> " + user.getUserName());
+//
+//        Token userToken = spotifyAPI.refreshToken(user.getUserName(), user.getRefreshToken());
+//
+//        if (!Strings.isNullOrEmpty(userToken.getAccessToken()))
+//            suggest.getRecommendations(userToken);
+//    }
+
+    @Scheduled(cron = "0 0 */3 * * *")
     public void avoidConnectionDrop() {
-        LOGGER.info("Executo mysql per evitar el drop");
+        LOGGER.info("Execute sql select to avoid connection drop");
         userDAO.getUsers();
     }
 }
