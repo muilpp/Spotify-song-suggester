@@ -18,14 +18,14 @@ public class LoggingRequestInterceptor implements ClientHttpRequestInterceptor {
 
         ClientHttpResponse response = execution.execute(request, body);
 
-        // log(request,body,response);
+//        log(request,body,response);
 
         return response;
     }
 
     private void log(HttpRequest request, byte[] body, ClientHttpResponse response) throws IOException {
         log.info("Request -> " + request.getURI().toString());
-        log.info("Body -> " + body.toString());
+        log.info("Body -> " + new String(body, "UTF-8"));
         log.info("Response -> " + response.getStatusCode());
     }
 }

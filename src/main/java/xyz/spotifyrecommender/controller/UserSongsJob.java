@@ -47,8 +47,8 @@ public class UserSongsJob {
             }
         }
     }
-
-//    @Scheduled(cron = "0 18 12 * * *")
+    
+//    @Scheduled(cron = "0 11 15 * * *")
 //    public void executeSpecificUser() {
 //        User user = userDAO.getUser("");
 //        LOGGER.info("execute specific user update for user -> " + user.getUserName());

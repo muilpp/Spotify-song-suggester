@@ -86,13 +86,21 @@ public class UserDAOImpl implements UserDAO {
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.getTransaction().begin();
 
-        Query query = session.createQuery(
-                "update User set access_revoked = :accesRevoked, access_token = :newAccessToken, refresh_token = :newRefreshToken where user_name = :userName");
-        query.setParameter("accesRevoked", accesRevoked);
-        query.setParameter("newAccessToken", newAccessToken);
-        query.setParameter("newRefreshToken", newRefreshToken);
-        query.setParameter("userName", userName);
+        Query query = null;
 
+        if (accesRevoked != "1") {
+            query = session.createQuery(
+                    "update User set access_revoked = :accesRevoked, access_token = :newAccessToken, refresh_token = :newRefreshToken where user_name = :userName");
+            query.setParameter("newAccessToken", newAccessToken);
+            query.setParameter("newRefreshToken", newRefreshToken);
+        } else {
+            //do not update the credentials if a user revokes the access
+            query = session.createQuery("update User set access_revoked = :accesRevoked where user_name = :userName");
+        }
+
+        query.setParameter("accesRevoked", accesRevoked);
+        query.setParameter("userName", userName);
+        
         int rowCount = query.executeUpdate();
         LOGGER.info("Updated -> " + rowCount);
         session.getTransaction().commit();

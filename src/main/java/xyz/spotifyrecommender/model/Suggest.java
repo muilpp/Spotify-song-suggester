@@ -28,7 +28,6 @@ public class Suggest {
     private SpotifyAPI spotifyApi;
 
     public RecommendationDTO getRecommendations(Token authToken) {
-
         TopShortTermTracksDTO shortTermTracks = spotifyApi.getTopTracks(authToken.getAccessToken());
 
         List<Item> itemList = shortTermTracks.getItemList();

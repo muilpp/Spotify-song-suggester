@@ -58,6 +58,7 @@ import xyz.spotifyrecommender.model.database.UserDAO;
 import xyz.spotifyrecommender.model.error_handler.ErrorHandlerAccessRevoked;
 import xyz.spotifyrecommender.model.error_handler.ErrorHandlerGeneral;
 import xyz.spotifyrecommender.model.interceptor.BearerHeaderInterceptor;
+import xyz.spotifyrecommender.model.interceptor.LoggingRequestInterceptor;
 import xyz.spotifyrecommender.model.webservice_data.PlaylistDTO;
 import xyz.spotifyrecommender.model.webservice_data.PlaylistItem;
 import xyz.spotifyrecommender.model.webservice_data.RecommendationDTO;
@@ -75,6 +76,11 @@ public class SpotifyAPIImpl implements SpotifyAPI {
 
     @Bean
     public RestTemplate restTemplate() {
+//        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+//        Proxy proxy = new Proxy(Type.HTTP, new InetSocketAddress("", 8888));
+//        requestFactory.setProxy(proxy);
+//        RestTemplate restTemplate = new RestTemplate(requestFactory);
+//        return restTemplate;
         return new RestTemplate();
     }
 
@@ -216,6 +222,7 @@ public class SpotifyAPIImpl implements SpotifyAPI {
 
     @Override
     public Token requestToken(String authorizationCode) {
+        restTemplate.getInterceptors().removeIf(s -> s.getClass().equals(BearerHeaderInterceptor.class));
         restTemplate.setErrorHandler(new ErrorHandlerGeneral());
 
         MultiValueMap<String, String> authData = new LinkedMultiValueMap<>();
@@ -234,7 +241,9 @@ public class SpotifyAPIImpl implements SpotifyAPI {
 
     @Override
     public Token refreshToken(String userName, String refreshToken) {
+        restTemplate.getInterceptors().removeIf(s -> s.getClass().equals(BearerHeaderInterceptor.class));
         restTemplate.setErrorHandler(new ErrorHandlerAccessRevoked());
+        restTemplate.getInterceptors().add(new LoggingRequestInterceptor());
 
         MultiValueMap<String, String> authData = new LinkedMultiValueMap<>();
         authData.add(GRANT_TYPE_KEY, REFRESH_TOKEN_KEY);
@@ -244,6 +253,7 @@ public class SpotifyAPIImpl implements SpotifyAPI {
 
         ResponseEntity<Token> response = restTemplate.postForEntity(buildURIToRequestToken(), authData, Token.class);
 
+        restTemplate.getInterceptors().removeIf(s -> s.getClass().equals(LoggingRequestInterceptor.class));
         if (response.getStatusCode() == HttpStatus.OK) {
             return response.getBody();
         } else {
