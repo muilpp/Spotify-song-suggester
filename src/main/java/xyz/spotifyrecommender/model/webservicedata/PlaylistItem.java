@@ -1,4 +1,4 @@
-package xyz.spotifyrecommender.model.webservice_data;
+package xyz.spotifyrecommender.model.webservicedata;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -12,6 +12,7 @@ public class PlaylistItem {
     private PlaylistTrack playListTracks;
 
     public PlaylistItem() {
+        //A no-arg constructor is needed to instantiate the object
     }
 
     public PlaylistItem(String name, boolean isPublic) {

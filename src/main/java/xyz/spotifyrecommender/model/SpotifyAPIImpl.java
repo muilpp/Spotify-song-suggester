@@ -55,40 +55,35 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import xyz.spotifyrecommender.model.database.UserDAO;
-import xyz.spotifyrecommender.model.error_handler.ErrorHandlerAccessRevoked;
-import xyz.spotifyrecommender.model.error_handler.ErrorHandlerGeneral;
+import xyz.spotifyrecommender.model.errorhandler.ErrorHandlerAccessRevoked;
+import xyz.spotifyrecommender.model.errorhandler.ErrorHandlerGeneral;
 import xyz.spotifyrecommender.model.interceptor.BearerHeaderInterceptor;
 import xyz.spotifyrecommender.model.interceptor.LoggingRequestInterceptor;
-import xyz.spotifyrecommender.model.webservice_data.PlaylistDTO;
-import xyz.spotifyrecommender.model.webservice_data.PlaylistItem;
-import xyz.spotifyrecommender.model.webservice_data.RecommendationDTO;
-import xyz.spotifyrecommender.model.webservice_data.Token;
-import xyz.spotifyrecommender.model.webservice_data.TopShortTermTracksDTO;
-import xyz.spotifyrecommender.model.webservice_data.Track;
-import xyz.spotifyrecommender.model.webservice_data.TrackURI;
-import xyz.spotifyrecommender.model.webservice_data.UserProfile;
-import xyz.spotifyrecommender.model.webservice_data.UserProfileDTO;
+import xyz.spotifyrecommender.model.webservicedata.PlaylistDTO;
+import xyz.spotifyrecommender.model.webservicedata.PlaylistItem;
+import xyz.spotifyrecommender.model.webservicedata.RecommendationDTO;
+import xyz.spotifyrecommender.model.webservicedata.Token;
+import xyz.spotifyrecommender.model.webservicedata.TopShortTermTracksDTO;
+import xyz.spotifyrecommender.model.webservicedata.Track;
+import xyz.spotifyrecommender.model.webservicedata.TrackURI;
+import xyz.spotifyrecommender.model.webservicedata.UserProfile;
+import xyz.spotifyrecommender.model.webservicedata.UserProfileDTO;
 
 @Service
 public class SpotifyAPIImpl implements SpotifyAPI {
 
-    private final static Logger LOGGER = Logger.getLogger(SpotifyAPIImpl.class.getName());
-
-    @Bean
-    public RestTemplate restTemplate() {
-//        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
-//        Proxy proxy = new Proxy(Type.HTTP, new InetSocketAddress("", 8888));
-//        requestFactory.setProxy(proxy);
-//        RestTemplate restTemplate = new RestTemplate(requestFactory);
-//        return restTemplate;
-        return new RestTemplate();
-    }
+    private static final Logger LOGGER = Logger.getLogger(SpotifyAPIImpl.class.getName());
 
     @Autowired
     private UserDAO userDAO;
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
 
     @Override
     public TopShortTermTracksDTO getTopTracks(String bearer) {
@@ -110,7 +105,7 @@ public class SpotifyAPIImpl implements SpotifyAPI {
     public String getPlaylistId() {
         PlaylistDTO playlistDTO = getUserPlaylists();
 
-        LOGGER.info("Mida playlists -> " + playlistDTO.getPlaylistItemList().size());
+        LOGGER.log(Level.INFO, String.format("Mida playlists -> %s", playlistDTO.getPlaylistItemList().size()));
         for (PlaylistItem playlistItem : playlistDTO.getPlaylistItemList()) {
             if (!Strings.isNullOrEmpty(playlistItem.getPlaylistName())
                     && playlistItem.getPlaylistName().equalsIgnoreCase(PLAYLIST_NAME)) {
@@ -282,8 +277,8 @@ public class SpotifyAPIImpl implements SpotifyAPI {
 
     @Override
     public RecommendationDTO getRecommendations(List<String> songIdList) {
-        final int MAX_THREADS = (int) (Math.ceil((double) DEFAULT_TOP_TRACKS_LIMIT / STEP_SIZE_FOR_RECS));
-        ExecutorService executor = Executors.newFixedThreadPool(MAX_THREADS);
+        final int maxThreads = (int) (Math.ceil((double) DEFAULT_TOP_TRACKS_LIMIT / STEP_SIZE_FOR_RECS));
+        ExecutorService executor = Executors.newFixedThreadPool(maxThreads);
 
         RecommendationDTO recs = new RecommendationDTO();
 
@@ -300,13 +295,14 @@ public class SpotifyAPIImpl implements SpotifyAPI {
             executor.awaitTermination(MAX_TIME_TO_WAIT_IN_SECS, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            Thread.currentThread().interrupt();
         }
 
         for (Future<Set<Track>> future : workerRecommendations) {
             try {
                 if (future.get() != null) {
                     recs.getTrackSet().addAll(future.get());
-                    LOGGER.info("List size -> " + recs.getTrackSet().size());
+                    LOGGER.log(Level.INFO, String.format("List size -> %s", recs.getTrackSet().size()));
                 } else
                     LOGGER.log(Level.SEVERE, "Future is null");
             } catch (InterruptedException | ExecutionException | NullPointerException e) {
@@ -318,7 +314,6 @@ public class SpotifyAPIImpl implements SpotifyAPI {
     }
 
     private class Recommendations implements Callable<Set<Track>> {
-        private final Logger LOGGER = Logger.getLogger(RecommendationDTO.class.getName());
         private String songId;
 
         public Recommendations(String songId) {

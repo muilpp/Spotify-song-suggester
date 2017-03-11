@@ -1,8 +1,9 @@
 package xyz.spotifyrecommender.controller;
 
-import static xyz.spotifyrecommender.model.Constant.DEFAULT_ACCESS_REVOKED;
 import static xyz.spotifyrecommender.model.Constant.AUTHENTICATION_PROBLEM;
+import static xyz.spotifyrecommender.model.Constant.DEFAULT_ACCESS_REVOKED;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +17,14 @@ import com.google.common.base.Strings;
 import xyz.spotifyrecommender.model.SpotifyAPI;
 import xyz.spotifyrecommender.model.Suggest;
 import xyz.spotifyrecommender.model.database.UserDAO;
-import xyz.spotifyrecommender.model.webservice_data.RecommendationDTO;
-import xyz.spotifyrecommender.model.webservice_data.Token;
+import xyz.spotifyrecommender.model.webservicedata.RecommendationDTO;
+import xyz.spotifyrecommender.model.webservicedata.Token;
 
 @RestController
 @RequestMapping("/suggest")
 public class SuggestController {
 
-    private final static Logger LOGGER = Logger.getLogger(SuggestController.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(SuggestController.class.getName());
 
     @Autowired
     private Suggest suggest;
@@ -52,7 +53,7 @@ public class SuggestController {
             userDAO.updateUserAccess(userName, DEFAULT_ACCESS_REVOKED, authToken.getAccessToken(),
                     authToken.getRefreshToken());
 
-        LOGGER.info("User " + userName + " genera una llista nova");
+        LOGGER.log(Level.INFO, String.format("User %s genera una llista nova", userName));
 
         return suggest.getRecommendations(authToken);
     }

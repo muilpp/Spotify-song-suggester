@@ -1,4 +1,4 @@
-package xyz.spotifyrecommender.model.webservice_data;
+package xyz.spotifyrecommender.model.webservicedata;
 
 import java.util.ArrayList;
 import java.util.List;

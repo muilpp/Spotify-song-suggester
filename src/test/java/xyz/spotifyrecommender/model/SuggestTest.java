@@ -28,12 +28,12 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import xyz.spotifyrecommender.model.webservice_data.Item;
-import xyz.spotifyrecommender.model.webservice_data.RecommendationDTO;
-import xyz.spotifyrecommender.model.webservice_data.Token;
-import xyz.spotifyrecommender.model.webservice_data.TopShortTermTracksDTO;
-import xyz.spotifyrecommender.model.webservice_data.Track;
-import xyz.spotifyrecommender.model.webservice_data.TrackURI;
+import xyz.spotifyrecommender.model.webservicedata.Item;
+import xyz.spotifyrecommender.model.webservicedata.RecommendationDTO;
+import xyz.spotifyrecommender.model.webservicedata.Token;
+import xyz.spotifyrecommender.model.webservicedata.TopShortTermTracksDTO;
+import xyz.spotifyrecommender.model.webservicedata.Track;
+import xyz.spotifyrecommender.model.webservicedata.TrackURI;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SuggestTest {

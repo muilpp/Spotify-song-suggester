@@ -1,4 +1,4 @@
-package xyz.spotifyrecommender.model.error_handler;
+package xyz.spotifyrecommender.model.errorhandler;
 
 import java.io.IOException;
 
@@ -8,7 +8,7 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.ResponseErrorHandler;
 
 public class ErrorHandlerAccessRevoked implements ResponseErrorHandler {
-    private final static Logger LOGGER = Logger.getLogger(ErrorHandlerAccessRevoked.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ErrorHandlerAccessRevoked.class.getName());
 
     @Override
     public boolean hasError(ClientHttpResponse response) throws IOException {
@@ -24,9 +24,11 @@ public class ErrorHandlerAccessRevoked implements ResponseErrorHandler {
 
     public static class RestUtil {
 
-        public static boolean isError(HttpStatus status) {
+        private RestUtil() {}
+        
+        static boolean isError(HttpStatus status) {
             HttpStatus.Series series = status.series();
-            return (HttpStatus.Series.CLIENT_ERROR.equals(series) || HttpStatus.Series.SERVER_ERROR.equals(series));
+            return HttpStatus.Series.CLIENT_ERROR.equals(series) || HttpStatus.Series.SERVER_ERROR.equals(series);
         }
     }
 }

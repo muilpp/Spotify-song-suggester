@@ -1,4 +1,4 @@
-package xyz.spotifyrecommender.model.webservice_data;
+package xyz.spotifyrecommender.model.webservicedata;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -19,7 +19,7 @@ public class TrackURI {
         return uriSet;
     }
 
-    public void setURISet(HashSet<String> uriList) {
+    public void setURISet(Set<String> uriList) {
         this.uriSet = uriList;
     }
 }

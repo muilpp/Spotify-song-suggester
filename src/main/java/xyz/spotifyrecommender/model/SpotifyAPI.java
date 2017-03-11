@@ -2,11 +2,11 @@ package xyz.spotifyrecommender.model;
 
 import java.util.List;
 
-import xyz.spotifyrecommender.model.webservice_data.PlaylistDTO;
-import xyz.spotifyrecommender.model.webservice_data.RecommendationDTO;
-import xyz.spotifyrecommender.model.webservice_data.Token;
-import xyz.spotifyrecommender.model.webservice_data.TopShortTermTracksDTO;
-import xyz.spotifyrecommender.model.webservice_data.TrackURI;
+import xyz.spotifyrecommender.model.webservicedata.PlaylistDTO;
+import xyz.spotifyrecommender.model.webservicedata.RecommendationDTO;
+import xyz.spotifyrecommender.model.webservicedata.Token;
+import xyz.spotifyrecommender.model.webservicedata.TopShortTermTracksDTO;
+import xyz.spotifyrecommender.model.webservicedata.TrackURI;
 
 public interface SpotifyAPI {
     public TopShortTermTracksDTO getTopTracks(String bearer);

@@ -1,10 +1,12 @@
-package xyz.spotifyrecommender.model.webservice_data;
+package xyz.spotifyrecommender.model.webservicedata;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserProfile {
-    private String href, id, uri;
+    private String href;
+    private String id;
+    private String uri;
 
     public String getUri() {
         return uri;

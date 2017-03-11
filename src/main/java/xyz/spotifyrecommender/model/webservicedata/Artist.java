@@ -1,4 +1,4 @@
-package xyz.spotifyrecommender.model.webservice_data;
+package xyz.spotifyrecommender.model.webservicedata;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

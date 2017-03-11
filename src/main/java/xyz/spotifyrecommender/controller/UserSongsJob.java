@@ -13,10 +13,10 @@ import xyz.spotifyrecommender.model.SpotifyAPI;
 import xyz.spotifyrecommender.model.Suggest;
 import xyz.spotifyrecommender.model.database.User;
 import xyz.spotifyrecommender.model.database.UserDAO;
-import xyz.spotifyrecommender.model.webservice_data.Token;
+import xyz.spotifyrecommender.model.webservicedata.Token;
 
 public class UserSongsJob {
-    private final static Logger LOGGER = Logger.getLogger(UserSongsJob.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(UserSongsJob.class.getName());
 
     @Autowired
     SpotifyAPI spotifyAPI;
@@ -30,10 +30,10 @@ public class UserSongsJob {
     @Scheduled(cron = "0 50 8 * * SUN")
     public void execute() {
         List<User> userList = userDAO.getUsers();
-        LOGGER.info("execute job, user list size -> " + userList.size());
+        LOGGER.log(Level.INFO, "execute job, user list size -> %s", userList.size());
 
         for (User user : userList) {
-            LOGGER.info("automatic update for user -> " + user.getUserName());
+            LOGGER.log(Level.INFO, "automatic update for user -> %s", user.getUserName());
             Token userToken = spotifyAPI.refreshToken(user.getUserName(), user.getRefreshToken());
 
             if (!Strings.isNullOrEmpty(userToken.getAccessToken()))
@@ -44,21 +44,11 @@ public class UserSongsJob {
                 Thread.sleep(10000);
             } catch (InterruptedException e) {
                 LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                Thread.currentThread().interrupt();
             }
         }
     }
     
-//    @Scheduled(cron = "0 11 15 * * *")
-//    public void executeSpecificUser() {
-//        User user = userDAO.getUser("");
-//        LOGGER.info("execute specific user update for user -> " + user.getUserName());
-//
-//        Token userToken = spotifyAPI.refreshToken(user.getUserName(), user.getRefreshToken());
-//
-//        if (!Strings.isNullOrEmpty(userToken.getAccessToken()))
-//            suggest.getRecommendations(userToken);
-//    }
-
     @Scheduled(cron = "0 0 */3 * * *")
     public void avoidConnectionDrop() {
         LOGGER.info("Execute sql select to avoid connection drop");

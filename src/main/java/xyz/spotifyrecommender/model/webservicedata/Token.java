@@ -1,11 +1,12 @@
-package xyz.spotifyrecommender.model.webservice_data;
+package xyz.spotifyrecommender.model.webservicedata;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Token {
-    private String accessToken, refreshToken;
+    private String accessToken;
+    private String refreshToken;
 
     @JsonProperty("access_token")
     public String getAccessToken() {

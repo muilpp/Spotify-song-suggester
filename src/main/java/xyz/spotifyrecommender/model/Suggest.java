@@ -14,11 +14,11 @@ import org.springframework.stereotype.Service;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
-import xyz.spotifyrecommender.model.webservice_data.Item;
-import xyz.spotifyrecommender.model.webservice_data.RecommendationDTO;
-import xyz.spotifyrecommender.model.webservice_data.Token;
-import xyz.spotifyrecommender.model.webservice_data.TopShortTermTracksDTO;
-import xyz.spotifyrecommender.model.webservice_data.TrackURI;
+import xyz.spotifyrecommender.model.webservicedata.Item;
+import xyz.spotifyrecommender.model.webservicedata.RecommendationDTO;
+import xyz.spotifyrecommender.model.webservicedata.Token;
+import xyz.spotifyrecommender.model.webservicedata.TopShortTermTracksDTO;
+import xyz.spotifyrecommender.model.webservicedata.TrackURI;
 
 @Service
 public class Suggest {
@@ -62,7 +62,7 @@ public class Suggest {
             int addedSongsCount = 0;
 
             // First chunk replaces the old songs
-            if (trackURIList.size() > 0)
+            if (!trackURIList.isEmpty())
                 addedSongsCount += spotifyApi.replaceOldSongsInPlaylist(userId, playlistId,
                         trackURIList.get(0));
             // If there're still songs to be added, add them normally

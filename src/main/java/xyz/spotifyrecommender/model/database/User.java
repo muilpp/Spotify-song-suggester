@@ -28,6 +28,7 @@ public class User {
     private String accessRevoked;
 
     public User() {
+        //Hibernate needs a no-arg constructor to instantiate the object via reflection
     }
 
     public User(String userName, String accessToken, String refreshToken, String accessRevoked) {
