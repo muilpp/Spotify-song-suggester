@@ -23,7 +23,7 @@ public final class Endpoints {
     }
 
     public static String buildURIForTopTracks() {
-        return BASE_URL + TOP_TRACKS_EP + "?" + Constant.TIME_RANGE + "=" + TimeRange.SHORT_TERM + "&" + LIMIT + "="
+        return BASE_URL + TOP_TRACKS_EP + "?" + Constant.TIME_RANGE + "=" + TimeRange.SHORT_TERM.getTimeRange() + "&" + LIMIT + "="
                 + Integer.toString(DEFAULT_TOP_TRACKS_LIMIT);
     }
 

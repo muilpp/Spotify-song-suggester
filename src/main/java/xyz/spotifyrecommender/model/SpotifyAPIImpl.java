@@ -238,7 +238,6 @@ public class SpotifyAPIImpl implements SpotifyAPI {
     public Token refreshToken(String userName, String refreshToken) {
         restTemplate.getInterceptors().removeIf(s -> s.getClass().equals(BearerHeaderInterceptor.class));
         restTemplate.setErrorHandler(new ErrorHandlerAccessRevoked());
-        restTemplate.getInterceptors().add(new LoggingRequestInterceptor());
 
         MultiValueMap<String, String> authData = new LinkedMultiValueMap<>();
         authData.add(GRANT_TYPE_KEY, REFRESH_TOKEN_KEY);

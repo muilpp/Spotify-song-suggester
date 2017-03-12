@@ -30,10 +30,10 @@ public class UserSongsJob {
     @Scheduled(cron = "0 50 8 * * SUN")
     public void execute() {
         List<User> userList = userDAO.getUsers();
-        LOGGER.log(Level.INFO, "execute job, user list size -> %s", userList.size());
+        LOGGER.log(Level.INFO, String.format("execute job, user list size -> %s", userList.size()));
 
         for (User user : userList) {
-            LOGGER.log(Level.INFO, "automatic update for user -> %s", user.getUserName());
+            LOGGER.log(Level.INFO, String.format("automatic update for user -> %s", user.getUserName()));
             Token userToken = spotifyAPI.refreshToken(user.getUserName(), user.getRefreshToken());
 
             if (!Strings.isNullOrEmpty(userToken.getAccessToken()))
