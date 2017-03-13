@@ -105,7 +105,7 @@ public class SpotifyAPIImpl implements SpotifyAPI {
     public String getPlaylistId() {
         PlaylistDTO playlistDTO = getUserPlaylists();
 
-        LOGGER.log(Level.INFO, String.format("Mida playlists -> %s", playlistDTO.getPlaylistItemList().size()));
+        LOGGER.log(Level.INFO, "Mida playlists -> [{0}]", playlistDTO.getPlaylistItemList().size());
         for (PlaylistItem playlistItem : playlistDTO.getPlaylistItemList()) {
             if (!Strings.isNullOrEmpty(playlistItem.getPlaylistName())
                     && playlistItem.getPlaylistName().equalsIgnoreCase(PLAYLIST_NAME)) {
@@ -301,7 +301,7 @@ public class SpotifyAPIImpl implements SpotifyAPI {
             try {
                 if (future.get() != null) {
                     recs.getTrackSet().addAll(future.get());
-                    LOGGER.log(Level.INFO, String.format("List size -> %s", recs.getTrackSet().size()));
+                    LOGGER.log(Level.INFO, "List size -> [{0}]", recs.getTrackSet().size());
                 } else
                     LOGGER.log(Level.SEVERE, "Future is null");
             } catch (InterruptedException | ExecutionException | NullPointerException e) {

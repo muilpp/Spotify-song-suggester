@@ -77,7 +77,7 @@ public class UserDAOImpl implements UserDAO {
             query.setParameter("newToken", newToken);
 
             int rowCount = query.executeUpdate();
-            LOGGER.log(Level.INFO, "Updated -> %s", rowCount);
+            LOGGER.log(Level.INFO, "Updated -> [{0}]", rowCount);
             session.getTransaction().commit();
 
             return rowCount > 0;
@@ -107,7 +107,7 @@ public class UserDAOImpl implements UserDAO {
             query.setParameter(USER_NAME_PLACEHOLDER, userName);
 
             int rowCount = query.executeUpdate();
-            LOGGER.log(Level.INFO, String.format("Updated -> %s", rowCount));
+            LOGGER.log(Level.INFO, "Updated -> [{0}]", rowCount);
             session.getTransaction().commit();
 
             return rowCount > 0;
@@ -123,7 +123,7 @@ public class UserDAOImpl implements UserDAO {
             query.setParameter(USER_NAME_PLACEHOLDER, userName);
             int rowCount = query.executeUpdate();
 
-            LOGGER.log(Level.INFO, String.format("Deleted -> %s", rowCount));
+            LOGGER.log(Level.INFO, "Deleted -> [{0}]", rowCount);
             session.getTransaction().commit();
 
             return rowCount > 0;

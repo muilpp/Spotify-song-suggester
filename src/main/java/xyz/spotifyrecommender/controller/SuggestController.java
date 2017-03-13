@@ -53,7 +53,7 @@ public class SuggestController {
             userDAO.updateUserAccess(userName, DEFAULT_ACCESS_REVOKED, authToken.getAccessToken(),
                     authToken.getRefreshToken());
 
-        LOGGER.log(Level.INFO, String.format("User %s genera una llista nova", userName));
+        LOGGER.log(Level.INFO, "User [{0}] genera una llista nova", userName);
 
         return suggest.getRecommendations(authToken);
     }
