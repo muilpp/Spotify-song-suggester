@@ -25,13 +25,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import xyz.spotifyrecommender.model.webservicedata.Item;
 import xyz.spotifyrecommender.model.webservicedata.RecommendationDTO;
 import xyz.spotifyrecommender.model.webservicedata.Token;
-import xyz.spotifyrecommender.model.webservicedata.TopShortTermTracksDTO;
+import xyz.spotifyrecommender.model.webservicedata.TopTracksDTO;
 import xyz.spotifyrecommender.model.webservicedata.Track;
 import xyz.spotifyrecommender.model.webservicedata.TrackURI;
 
@@ -53,11 +54,11 @@ public class SuggestTest {
         token = new Token();
         token.setAccessToken("testToken");
 
-        TopShortTermTracksDTO topTracksDTO = new TopShortTermTracksDTO();
+        TopTracksDTO topTracksDTO = new TopTracksDTO();
         List<Item> itemList = new ArrayList<>();
         createItemList(itemList);
         topTracksDTO.setItemList(itemList);
-        doReturn(topTracksDTO).when(spotifyAPI).getTopTracks(anyString());
+        doReturn(topTracksDTO).when(spotifyAPI).getTopTracks(anyString(), anyString(), anyString());
 
         doReturn("testPlaylist").when(spotifyAPI).getPlaylistId();
         doReturn("testUserId").when(spotifyAPI).getUserId(anyString());
@@ -68,16 +69,16 @@ public class SuggestTest {
         Set<Track> set = new HashSet<>();
         set.add(track);
         recs.setTrackList(set);
-        doReturn(recs).when(spotifyAPI).getRecommendations(anyList());
+        doReturn(recs).when(spotifyAPI).getRecommendations(anyList(), anyString());
     }
 
     @Test
     public void notEnoughDataIfNoSongsAvailable() {
-        doReturn(new TopShortTermTracksDTO()).when(spotifyAPI).getTopTracks(anyString());
+        doReturn(new TopTracksDTO()).when(spotifyAPI).getTopTracks(anyString(), anyString(), anyString());
 
-        RecommendationDTO recommendations = suggest.getRecommendations(token);
+        RecommendationDTO recommendations = suggest.getRecommendations(token, "false", "true");
 
-        verify(spotifyAPI, times(1)).getTopTracks(anyString());
+        verify(spotifyAPI, times(1)).getTopTracks(anyString(), anyString(), anyString());
         assertThat(recommendations.isSuccess(), equalTo(false));
         assertThat(recommendations.getMessage(), equalTo(NOT_ENOUGH_DATA_FOR_RECOMMENDATIONS));
     }
@@ -87,7 +88,7 @@ public class SuggestTest {
         doReturn(null).when(spotifyAPI).getPlaylistId();
         doReturn(null).when(spotifyAPI).createPlaylist(anyString());
 
-        RecommendationDTO recommendations = suggest.getRecommendations(token);
+        RecommendationDTO recommendations = suggest.getRecommendations(token, "false", "true");
 
         verify(spotifyAPI, times(1)).getPlaylistId();
         verify(spotifyAPI, times(1)).getUserId(anyString());
@@ -103,7 +104,7 @@ public class SuggestTest {
         doReturn(3).when(spotifyAPI).replaceOldSongsInPlaylist(anyString(), anyString(),
                 any(TrackURI.class));
 
-        RecommendationDTO recommendations = suggest.getRecommendations(token);
+        RecommendationDTO recommendations = suggest.getRecommendations(token, "false", "true");
 
         assertThat(recommendations.isSuccess(), equalTo(true));
         assertThat(recommendations.getMessage(), equalTo("3"));
@@ -116,7 +117,7 @@ public class SuggestTest {
         doReturn(4).when(spotifyAPI).replaceOldSongsInPlaylist(anyString(), anyString(),
                 any(TrackURI.class));
 
-        RecommendationDTO recommendations = suggest.getRecommendations(token);
+        RecommendationDTO recommendations = suggest.getRecommendations(token, "false", "true");
 
         assertThat(recommendations.isSuccess(), equalTo(true));
         assertThat(recommendations.getMessage(), equalTo("4"));
@@ -127,11 +128,11 @@ public class SuggestTest {
     public void noRecommendationsIfSpotifyGivesNoRecommendations() {
         RecommendationDTO recs = new RecommendationDTO();
         recs.setTrackList(Collections.<Track> emptySet());
-        doReturn(recs).when(spotifyAPI).getRecommendations(anyList());
+        doReturn(recs).when(spotifyAPI).getRecommendations(anyList(), anyString());
 
-        RecommendationDTO recommendations = suggest.getRecommendations(token);
+        RecommendationDTO recommendations = suggest.getRecommendations(token, "false", "true");
 
-        verify(spotifyAPI, times(1)).getRecommendations(anyList());
+        verify(spotifyAPI, times(1)).getRecommendations(anyList(), anyString());
         assertThat(recommendations.isSuccess(), equalTo(false));
         assertThat(recommendations.getMessage(), equalTo(COULD_NOT_GET_RECOMMENDATIONS));
     }

@@ -5,11 +5,11 @@ import java.util.List;
 import xyz.spotifyrecommender.model.webservicedata.PlaylistDTO;
 import xyz.spotifyrecommender.model.webservicedata.RecommendationDTO;
 import xyz.spotifyrecommender.model.webservicedata.Token;
-import xyz.spotifyrecommender.model.webservicedata.TopShortTermTracksDTO;
+import xyz.spotifyrecommender.model.webservicedata.TopTracksDTO;
 import xyz.spotifyrecommender.model.webservicedata.TrackURI;
 
 public interface SpotifyAPI {
-    public TopShortTermTracksDTO getTopTracks(String bearer);
+    public TopTracksDTO getTopTracks(String bearer, String avoidSpanishMusic, String isShortTerm);
 
     public String getPlaylistId();
 
@@ -58,5 +58,5 @@ public interface SpotifyAPI {
      * @param songIdList
      * @return the list of songs wrapped in the RecommendationDTO
      */
-    public RecommendationDTO getRecommendations(List<String> songIdList);
+    public RecommendationDTO getRecommendations(List<String> songIdList, String avoidSpanishMusic);
 }

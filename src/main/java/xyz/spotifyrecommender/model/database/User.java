@@ -21,24 +21,33 @@ public class User {
     @Column(name = "access_token")
     private String accessToken;
 
-    @Column(name = "refresh_token")
+	@Column(name = "refresh_token")
     private String refreshToken;
 
     @Column(name = "access_revoked")
     private String accessRevoked;
 
-    public User() {
+    @Column(name = "avoid_spanish_music")
+    private String avoidSpanishMusic;
+
+    @Column(name = "short_term_tracks")
+    private String shortTermTracks;
+
+	public User() {
         //Hibernate needs a no-arg constructor to instantiate the object via reflection
     }
 
-    public User(String userName, String accessToken, String refreshToken, String accessRevoked) {
+    public User(String userName, String accessToken, String refreshToken, String accessRevoked, 
+    		String avoidSpanishMusic, String shortTermTracks) {
         this.userName = userName;
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.accessRevoked = accessRevoked;
+        this.avoidSpanishMusic = avoidSpanishMusic;
+        this.shortTermTracks = shortTermTracks;
     }
 
-    public int getId() {
+	public int getId() {
         return id;
     }
 
@@ -78,4 +87,19 @@ public class User {
         this.accessRevoked = accessRevoked;
     }
 
+    public String getAvoidSpanishMusic() {
+		return avoidSpanishMusic;
+	}
+
+	public void setAvoidSpanishMusic(String avoidSpanishMusic) {
+		this.avoidSpanishMusic = avoidSpanishMusic;
+	}
+
+    public String getShortTermTracks() {
+		return shortTermTracks;
+	}
+
+	public void setShortTermTracks(String shortTermTracks) {
+		this.shortTermTracks = shortTermTracks;
+	}
 }

@@ -57,13 +57,15 @@ import com.google.common.collect.Lists;
 import xyz.spotifyrecommender.model.database.UserDAO;
 import xyz.spotifyrecommender.model.errorhandler.ErrorHandlerAccessRevoked;
 import xyz.spotifyrecommender.model.errorhandler.ErrorHandlerGeneral;
+import xyz.spotifyrecommender.model.helper.LanguageHelper;
 import xyz.spotifyrecommender.model.interceptor.BearerHeaderInterceptor;
 import xyz.spotifyrecommender.model.interceptor.LoggingRequestInterceptor;
+import xyz.spotifyrecommender.model.webservicedata.Item;
 import xyz.spotifyrecommender.model.webservicedata.PlaylistDTO;
 import xyz.spotifyrecommender.model.webservicedata.PlaylistItem;
 import xyz.spotifyrecommender.model.webservicedata.RecommendationDTO;
 import xyz.spotifyrecommender.model.webservicedata.Token;
-import xyz.spotifyrecommender.model.webservicedata.TopShortTermTracksDTO;
+import xyz.spotifyrecommender.model.webservicedata.TopTracksDTO;
 import xyz.spotifyrecommender.model.webservicedata.Track;
 import xyz.spotifyrecommender.model.webservicedata.TrackURI;
 import xyz.spotifyrecommender.model.webservicedata.UserProfile;
@@ -86,26 +88,38 @@ public class SpotifyAPIImpl implements SpotifyAPI {
     }
 
     @Override
-    public TopShortTermTracksDTO getTopTracks(String bearer) {
+    public TopTracksDTO getTopTracks(String bearer, String avoidSpanishMusic, String isShortTerm) {
         //remove the old bearer in case this gets called from the webservice
         restTemplate.getInterceptors().removeIf(s -> s.getClass().equals(BearerHeaderInterceptor.class));
         restTemplate.getInterceptors().add(new BearerHeaderInterceptor(bearer));
         restTemplate.setErrorHandler(new ErrorHandlerGeneral());
 
-        ResponseEntity<TopShortTermTracksDTO> response = restTemplate.getForEntity(buildURIForTopTracks(),
-                TopShortTermTracksDTO.class);
+        ResponseEntity<TopTracksDTO> response = restTemplate.getForEntity(buildURIForTopTracks(isShortTerm),
+                TopTracksDTO.class);
 
-        if (response.getStatusCode() == HttpStatus.OK)
-            return response.getBody();
+        if (response.getStatusCode() != HttpStatus.OK)
+            return new TopTracksDTO();
 
-        return new TopShortTermTracksDTO();
+        List<Item> topTracksList = new ArrayList<Item>();
+        if (avoidSpanishMusic.equalsIgnoreCase("1")) {
+        	for (Item item : response.getBody().getItemList()) {
+        		if (!LanguageHelper.isSpanish(item.getSongName(), item.artistList())) {
+        			topTracksList.add(item);
+        		}
+        	}
+        } else
+        	return response.getBody();
+
+        if (topTracksList.isEmpty())
+        	return new TopTracksDTO();
+
+        return new TopTracksDTO(topTracksList);
     }
 
     @Override
     public String getPlaylistId() {
         PlaylistDTO playlistDTO = getUserPlaylists();
 
-        LOGGER.log(Level.INFO, "Mida playlists -> [{0}]", playlistDTO.getPlaylistItemList().size());
         for (PlaylistItem playlistItem : playlistDTO.getPlaylistItemList()) {
             if (!Strings.isNullOrEmpty(playlistItem.getPlaylistName())
                     && playlistItem.getPlaylistName().equalsIgnoreCase(PLAYLIST_NAME)) {
@@ -275,7 +289,7 @@ public class SpotifyAPIImpl implements SpotifyAPI {
     }
 
     @Override
-    public RecommendationDTO getRecommendations(List<String> songIdList) {
+    public RecommendationDTO getRecommendations(List<String> songIdList, String avoidSpanishMusic) {
         final int maxThreads = (int) (Math.ceil((double) DEFAULT_TOP_TRACKS_LIMIT / STEP_SIZE_FOR_RECS));
         ExecutorService executor = Executors.newFixedThreadPool(maxThreads);
 
@@ -301,7 +315,6 @@ public class SpotifyAPIImpl implements SpotifyAPI {
             try {
                 if (future.get() != null) {
                     recs.getTrackSet().addAll(future.get());
-                    LOGGER.log(Level.INFO, "List size -> [{0}]", recs.getTrackSet().size());
                 } else
                     LOGGER.log(Level.SEVERE, "Future is null");
             } catch (InterruptedException | ExecutionException | NullPointerException e) {
@@ -309,6 +322,13 @@ public class SpotifyAPIImpl implements SpotifyAPI {
             }
         }
 
+        if (avoidSpanishMusic.equalsIgnoreCase("1")) {
+        	LOGGER.log(Level.INFO, "Tinc {0} cançons abans de treure les espanyoles", recs.getTrackSet().size());
+        	LanguageHelper.removeSpanishSongs(recs.getTrackSet());
+        }
+
+        LOGGER.log(Level.INFO, "Tinc {0} cançons a la llista", recs.getTrackSet().size());
+        
         return recs;
     }
 

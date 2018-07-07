@@ -1,6 +1,9 @@
 package xyz.spotifyrecommender.model.database;
 
 import static xyz.spotifyrecommender.model.Constant.DEFAULT_ACCESS_REVOKED;
+import static xyz.spotifyrecommender.model.Constant.DEFAULT_AVOID_SPANISH_MUSIC;
+import static xyz.spotifyrecommender.model.Constant.DEFAULT_SHORT_TERM_TRACKS;
+
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,7 +27,7 @@ public class UserDAOImpl implements UserDAO {
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             tx = session.beginTransaction();
-            User user = new User(userName, accessToken, refreshToken, DEFAULT_ACCESS_REVOKED);
+            User user = new User(userName, accessToken, refreshToken, DEFAULT_ACCESS_REVOKED, DEFAULT_AVOID_SPANISH_MUSIC, DEFAULT_SHORT_TERM_TRACKS);
             userID = (Integer) session.save(user);
             tx.commit();
         } catch (HibernateException e) {
