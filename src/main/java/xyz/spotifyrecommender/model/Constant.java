@@ -1,8 +1,8 @@
 package xyz.spotifyrecommender.model;
 
 public final class Constant {
-    public static final String CLIENT_ID = "e1422906b44f4806a5efd2af0aeeec22";
-    public static final String CLIENT_SECRET = "ff4c56c16f7a4fba919162e8cf93d851";
+    public static final String CLIENT_ID = "";
+    public static final String CLIENT_SECRET = "";
     public static final String TIME_RANGE = "time_range";
     public static final String SEED_TRACKS = "seed_tracks";
     public static final String MARKET = "market=US";
