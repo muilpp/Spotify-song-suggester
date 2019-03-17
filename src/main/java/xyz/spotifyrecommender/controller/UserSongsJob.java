@@ -27,8 +27,8 @@ public class UserSongsJob {
 	@Autowired
 	Suggest suggest;
 
-    @Scheduled(cron = "0 50 8 * * SUN")
-//	@Scheduled(cron = "0 14 14 * * SAT")
+    @Scheduled(cron = "0 0 9 * * SUN")
+//	@Scheduled(cron = "0 35 19 * * SAT")
 	public void execute() {
 		List<User> userList = userDAO.getUsers();
 		LOGGER.log(Level.INFO, "execute job, user list size -> [{0}]", userList.size());

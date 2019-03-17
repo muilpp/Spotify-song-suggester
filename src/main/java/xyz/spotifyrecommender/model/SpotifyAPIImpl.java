@@ -328,7 +328,7 @@ public class SpotifyAPIImpl implements SpotifyAPI {
         }
 
         LOGGER.log(Level.INFO, "Tinc {0} cançons a la llista", recs.getTrackSet().size());
-        
+
         return recs;
     }
 

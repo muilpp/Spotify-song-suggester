@@ -39,6 +39,7 @@ public class SuggestController {
 
     @RequestMapping(value = "/{authorizationCode}", method = RequestMethod.GET)
     public RecommendationDTO getSuggestions(@PathVariable("authorizationCode") String authorizationCode) {
+    	
         Token authToken = spotifyAPI.requestToken(authorizationCode);
 
         if (Strings.isNullOrEmpty(authToken.getAccessToken()))
@@ -57,7 +58,7 @@ public class SuggestController {
 
         LOGGER.log(Level.INFO, "User {0} genera una llista nova", userName);
 
-        return suggest.getRecommendations(authToken, "1", DEFAULT_SHORT_TERM_TRACKS);
+        return suggest.getRecommendations(authToken, DEFAULT_AVOID_SPANISH_MUSIC, DEFAULT_SHORT_TERM_TRACKS);
 //        return suggest.getRecommendations(authToken, "1");
     }
 }
