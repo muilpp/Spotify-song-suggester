@@ -27,7 +27,7 @@ public class UserSongsJob {
 	@Autowired
 	Suggest suggest;
 
-    @Scheduled(cron = "0 0 9 * * SUN")
+    @Scheduled(cron = "0 0 5 * * SUN")
 //	@Scheduled(cron = "0 35 19 * * SAT")
 	public void execute() {
 		List<User> userList = userDAO.getUsers();
