@@ -7,11 +7,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TopShortTermTracksDTO {
+public class TopTracksDTO {
     private List<Item> itemsList;
 
-    public TopShortTermTracksDTO() {
+    public TopTracksDTO() {
         itemsList = new ArrayList<>();
+    }
+
+    public TopTracksDTO(List<Item> itemList) {
+        this.itemsList = itemList;
     }
 
     @JsonProperty("items")

@@ -1,5 +1,6 @@
 package xyz.spotifyrecommender.model.database;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface UserDAO {
@@ -40,6 +41,15 @@ public interface UserDAO {
      */
     public boolean updateUserAccess(String userName, String accesRevoked, String newAccessToken,
             String newRefreshToken);
+
+    /**
+     * Method to UPDATE the last time the user was updated
+     *
+     * @param userName
+     * @param lastRefreshTime
+     * @return true if user updated, false otherwise
+     */
+    public boolean updateUserLastRefresh(String userName, LocalDateTime lastRefreshTime);
 
     /**
      * Method to DELETE an employee from the records

@@ -18,38 +18,76 @@ public final class Endpoints {
     public static final String REQUEST_USER_PROFILE = "https://api.spotify.com/v1/me/";
 
     private static final String USER_ID_PLACEHOLDER = "{userId}";
-    
-    private Endpoints() {
-    }
 
-    public static String buildURIForTopTracks() {
-        return BASE_URL + TOP_TRACKS_EP + "?" + Constant.TIME_RANGE + "=" + TimeRange.SHORT_TERM.getTimeRange() + "&" + LIMIT + "="
-                + Integer.toString(DEFAULT_TOP_TRACKS_LIMIT);
+    private Endpoints() {}
+
+    public static String buildURIForTopTracks(String shortTerm) {
+    	final String TracksTimeRange = shortTerm.equalsIgnoreCase("1") ? TimeRange.SHORT_TERM.getTimeRange() : TimeRange.MEDIUM_TERM.getTimeRange(); 
+
+    	return new StringBuilder()
+    			.append(BASE_URL)
+    			.append(TOP_TRACKS_EP)
+    			.append("?")
+    			.append(Constant.TIME_RANGE)
+    			.append("=")
+    			.append(TracksTimeRange)
+    			.append("&")
+    			.append(LIMIT)
+    			.append("=")
+    			.append(Integer.toString(DEFAULT_TOP_TRACKS_LIMIT))
+    			.toString();
     }
 
     public static String buildURIForRecommendations(String songIds) {
-        return BASE_URL + RECOMMENDATIONS_EP + "?" + Constant.SEED_TRACKS + "=" + songIds + "&" + MARKET + "&" + LIMIT
-                + "=" + DEFAULT_RECS_LIMIT;
+    	return new StringBuilder()
+    			.append(BASE_URL)
+    			.append(RECOMMENDATIONS_EP)
+    			.append("?")
+    			.append(Constant.SEED_TRACKS)
+    			.append("=")
+    			.append(songIds)
+    			.append("&")
+    			.append(MARKET)
+    			.append("&")
+    			.append(LIMIT)
+    			.append("=")
+    			.append(DEFAULT_RECS_LIMIT)
+    			.toString();
     }
 
     public static String buildURIToGetUserPlaylists() {
-        return BASE_URL + PLAYLISTS_EP;
+    	return new StringBuilder()
+    			.append(BASE_URL)
+    			.append(PLAYLISTS_EP)
+    			.toString();
     }
 
     public static String buildURIToGetUserProfile() {
-        return BASE_URL + USER_PROFILE_EP;
+    	return new StringBuilder()
+    			.append(BASE_URL)
+    			.append(USER_PROFILE_EP)
+    			.toString();
     }
 
     public static String buildURIToCreatePlaylist(String userId) {
-        return BASE_URL + CREATE_PLAYLIST_EP.replace(USER_ID_PLACEHOLDER, userId);
+    	return new StringBuilder()
+    			.append(BASE_URL)
+    			.append(CREATE_PLAYLIST_EP.replace(USER_ID_PLACEHOLDER, userId))
+    			.toString();
     }
 
     public static String buildURIToReplaceOldSongs(String userId, String playlistId) {
-        return BASE_URL + REPLACE_SONGS_IN_PLAYLIST_EP.replace(USER_ID_PLACEHOLDER, userId).replace("{playlistId}", playlistId);
+    	return new StringBuilder()
+    			.append(BASE_URL)
+    			.append(REPLACE_SONGS_IN_PLAYLIST_EP.replace(USER_ID_PLACEHOLDER, userId).replace("{playlistId}", playlistId))
+    			.toString();
     }
 
     public static String buildURIToAddNewSongs(String userId, String playlistId) {
-        return BASE_URL + ADD_SONGS_IN_PLAYLIST_EP.replace(USER_ID_PLACEHOLDER, userId).replace("{playlistId}", playlistId);
+    	return new StringBuilder()
+    			.append(BASE_URL)
+    			.append(ADD_SONGS_IN_PLAYLIST_EP.replace(USER_ID_PLACEHOLDER, userId).replace("{playlistId}", playlistId))
+    			.toString();
     }
 
     public static String buildURIToRequestToken() {

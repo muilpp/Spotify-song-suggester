@@ -1,6 +1,8 @@
 package xyz.spotifyrecommender.controller;
 
 import static xyz.spotifyrecommender.model.Constant.AUTHENTICATION_PROBLEM;
+import static xyz.spotifyrecommender.model.Constant.DEFAULT_AVOID_SPANISH_MUSIC;
+import static xyz.spotifyrecommender.model.Constant.DEFAULT_SHORT_TERM_TRACKS;
 import static xyz.spotifyrecommender.model.Constant.DEFAULT_ACCESS_REVOKED;
 
 import java.util.logging.Level;
@@ -37,6 +39,7 @@ public class SuggestController {
 
     @RequestMapping(value = "/{authorizationCode}", method = RequestMethod.GET)
     public RecommendationDTO getSuggestions(@PathVariable("authorizationCode") String authorizationCode) {
+    	
         Token authToken = spotifyAPI.requestToken(authorizationCode);
 
         if (Strings.isNullOrEmpty(authToken.getAccessToken()))
@@ -53,8 +56,8 @@ public class SuggestController {
             userDAO.updateUserAccess(userName, DEFAULT_ACCESS_REVOKED, authToken.getAccessToken(),
                     authToken.getRefreshToken());
 
-        LOGGER.log(Level.INFO, "User [{0}] genera una llista nova", userName);
+        LOGGER.log(Level.INFO, "User {0} genera una llista nova", userName);
 
-        return suggest.getRecommendations(authToken);
+        return suggest.getRecommendations(authToken, DEFAULT_AVOID_SPANISH_MUSIC, DEFAULT_SHORT_TERM_TRACKS);
     }
 }

@@ -17,7 +17,7 @@ import com.google.common.collect.Lists;
 import xyz.spotifyrecommender.model.webservicedata.Item;
 import xyz.spotifyrecommender.model.webservicedata.RecommendationDTO;
 import xyz.spotifyrecommender.model.webservicedata.Token;
-import xyz.spotifyrecommender.model.webservicedata.TopShortTermTracksDTO;
+import xyz.spotifyrecommender.model.webservicedata.TopTracksDTO;
 import xyz.spotifyrecommender.model.webservicedata.TrackURI;
 
 @Service
@@ -27,8 +27,8 @@ public class Suggest {
     @Autowired
     private SpotifyAPI spotifyApi;
 
-    public RecommendationDTO getRecommendations(Token authToken) {
-        TopShortTermTracksDTO shortTermTracks = spotifyApi.getTopTracks(authToken.getAccessToken());
+    public RecommendationDTO getRecommendations(Token authToken, String avoidSpanishMusic, String isShortTerm) {
+        TopTracksDTO shortTermTracks = spotifyApi.getTopTracks(authToken.getAccessToken(), avoidSpanishMusic, isShortTerm);
 
         List<Item> itemList = shortTermTracks.getItemList();
 
@@ -52,7 +52,7 @@ public class Suggest {
             }
         }
 
-        RecommendationDTO recs = spotifyApi.getRecommendations(songIdList);
+        RecommendationDTO recs = spotifyApi.getRecommendations(songIdList, avoidSpanishMusic);
 
         if (recs.getTrackSet().isEmpty()) {
             LOGGER.info(COULD_NOT_GET_RECOMMENDATIONS);

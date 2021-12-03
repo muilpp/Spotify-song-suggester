@@ -18,6 +18,8 @@ public final class Constant {
     public static final int MAX_TIME_TO_WAIT_IN_SECS = 5;
     public static final String DEFAULT_ACCESS_REVOKED = "0";
     public static final String USER_ACCESS_REVOKED = "1";
+    public static final String DEFAULT_AVOID_SPANISH_MUSIC = "0";
+    public static final String DEFAULT_SHORT_TERM_TRACKS = "1";
 
     // Webservice params keys
     public static final String REFRESH_TOKEN_KEY = "refresh_token";
@@ -35,8 +37,11 @@ public final class Constant {
 
     // Error Messages
     public static final String AUTHENTICATION_PROBLEM = "There was a problem during the login, please try again later";
-    public static final String NOT_ENOUGH_DATA_FOR_RECOMMENDATIONS = "Not enough data to fetch a list of recommendations, listen to some music first!";
+	public static final String NOT_ENOUGH_DATA_FOR_RECOMMENDATIONS = "Not enough data to fetch a list of recommendations, listen to some music first!";
     public static final String COULD_NOT_GET_RECOMMENDATIONS = "Could not get recommendations this time, please try again later";
+    
+    // Language Detector Plugin
+    public static final String LANGUAGE_DETECTOR_KEY = "081a4ca81ea2d3f2ebc5e9c1ca992a67";
     
     private Constant() {}
 }

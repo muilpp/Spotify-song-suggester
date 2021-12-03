@@ -1,6 +1,6 @@
-plugins {
-    id "org.sonarqube" version "2.2"
-}
+//plugins {
+//    id "org.sonarqube" version "2.2"
+//}
 
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
@@ -12,6 +12,7 @@ repositories {
     // Use 'jcenter' for resolving your dependencies.
     // You can declare any Maven/Ivy/file repository here.
     jcenter()
+    mavenCentral()
 }
 
 webAppDirName = 'WebContent'
@@ -36,9 +37,14 @@ dependencies {
     compile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.1.0'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.7.5'
 
-    compile 'org.hibernate:hibernate-core:5.1.0.Final'
-    compile 'mysql:mysql-connector-java:5.1.31'
+    compile 'org.hibernate:hibernate-core:5.6.1.Final'
+    compile 'mysql:mysql-connector-java:8.0.25'
 
     compile 'org.quartz-scheduler:quartz:2.2.1'
     compile 'org.quartz-scheduler:quartz-jobs:2.2.1'
+
+	compile 'com.detectlanguage:detectlanguage:1.1.0'
+
+    compile "jakarta.xml.bind:jakarta.xml.bind-api:2.3.2"
+    compile "org.glassfish.jaxb:jaxb-runtime:2.3.2"
 }

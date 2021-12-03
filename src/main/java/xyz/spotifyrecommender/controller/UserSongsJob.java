@@ -16,42 +16,42 @@ import xyz.spotifyrecommender.model.database.UserDAO;
 import xyz.spotifyrecommender.model.webservicedata.Token;
 
 public class UserSongsJob {
-    private static final Logger LOGGER = Logger.getLogger(UserSongsJob.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(UserSongsJob.class.getName());
 
-    @Autowired
-    SpotifyAPI spotifyAPI;
+	@Autowired
+	SpotifyAPI spotifyAPI;
 
-    @Autowired
-    UserDAO userDAO;
+	@Autowired
+	UserDAO userDAO;
 
-    @Autowired
-    Suggest suggest;
+	@Autowired
+	Suggest suggest;
 
-    @Scheduled(cron = "0 50 8 * * SUN")
-    public void execute() {
-        List<User> userList = userDAO.getUsers();
-        LOGGER.log(Level.INFO, "execute job, user list size -> [{0}]", userList.size());
+    @Scheduled(cron = "0 0 5 * * SUN")
+	public void execute() {
+		List<User> userList = userDAO.getUsers();
+		LOGGER.log(Level.INFO, "execute job, user list size -> [{0}]", userList.size());
 
-        for (User user : userList) {
-            LOGGER.log(Level.INFO, "automatic update for user -> [{0}]", user.getUserName());
-            Token userToken = spotifyAPI.refreshToken(user.getUserName(), user.getRefreshToken());
+		for (User user : userList) {
+			LOGGER.log(Level.INFO, "automatic update for user -> [{0}]", user.getUserName());
+			Token userToken = spotifyAPI.refreshToken(user.getUserName(), user.getRefreshToken());
 
-            if (!Strings.isNullOrEmpty(userToken.getAccessToken()))
-                suggest.getRecommendations(userToken);
+			if (!Strings.isNullOrEmpty(userToken.getAccessToken()))
+				suggest.getRecommendations(userToken, user.getAvoidSpanishMusic(), user.getShortTermTracks());
 
-            try {
-                // wait 10s between each user
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                LOGGER.log(Level.SEVERE, e.getMessage(), e);
-                Thread.currentThread().interrupt();
-            }
-        }
-    }
-    
-    @Scheduled(cron = "0 0 */3 * * *")
-    public void avoidConnectionDrop() {
-        LOGGER.info("Execute sql select to avoid connection drop");
-        userDAO.getUsers();
-    }
+			try {
+				// wait 10s between each user
+				Thread.sleep(10000);
+			} catch (InterruptedException e) {
+				LOGGER.log(Level.SEVERE, e.getMessage(), e);
+				Thread.currentThread().interrupt();
+			}
+		}
+	}
+
+	@Scheduled(cron = "0 0 */3 * * *")
+	public void avoidConnectionDrop() {
+		LOGGER.info("Execute sql select to avoid connection drop");
+		userDAO.getUsers();
+	}
 }
