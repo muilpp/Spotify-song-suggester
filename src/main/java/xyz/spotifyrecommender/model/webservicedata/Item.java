@@ -1,40 +1,40 @@
 package xyz.spotifyrecommender.model.webservicedata;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Item {
-    private List<Artist> artistList;
-    private String songId;
-    private String songName;
 
-    @JsonProperty("artists")
-    public List<Artist> artistList() {
-        return artistList;
-    }
+  private List<Artist> artistList;
+  private String songId;
+  private String songName;
 
-    public void setArtistList(List<Artist> artistList) {
-        this.artistList = artistList;
-    }
+  @JsonProperty("artists")
+  public List<Artist> artistList() {
+    return artistList;
+  }
 
-    @JsonProperty("id")
-    public String getSongId() {
-        return songId;
-    }
+  public void setArtistList(List<Artist> artistList) {
+    this.artistList = artistList;
+  }
 
-    public void setSongId(String id) {
-        this.songId = id;
-    }
+  @JsonProperty("id")
+  public String getSongId() {
+    return songId;
+  }
 
-    @JsonProperty("name")
-    public String getSongName() {
-        return songName;
-    }
+  public void setSongId(String id) {
+    this.songId = id;
+  }
 
-    public void setSongName(String songName) {
-        this.songName = songName;
-    }
+  @JsonProperty("name")
+  public String getSongName() {
+    return songName;
+  }
+
+  public void setSongName(String songName) {
+    this.songName = songName;
+  }
 }

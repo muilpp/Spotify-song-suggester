@@ -2,73 +2,76 @@ package xyz.spotifyrecommender.model.helper;
 
 import static xyz.spotifyrecommender.model.Constant.LANGUAGE_DETECTOR_KEY;
 
+import com.detectlanguage.DetectLanguage;
+import com.detectlanguage.Result;
+import com.detectlanguage.errors.APIError;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.detectlanguage.DetectLanguage;
-import com.detectlanguage.Result;
-import com.detectlanguage.errors.APIError;
-
 import xyz.spotifyrecommender.model.webservicedata.Artist;
 import xyz.spotifyrecommender.model.webservicedata.Track;
 
 public class LanguageHelper {
-    private static final Logger LOGGER = Logger.getLogger(LanguageHelper.class.getName());
 
-	public static boolean isSpanish(String songName, List<Artist> artistList) {
-		DetectLanguage.apiKey = LANGUAGE_DETECTOR_KEY;
-		// https://github.com/detectlanguage/detectlanguage-java
+  private static final Logger LOGGER = Logger.getLogger(LanguageHelper.class.getName());
 
-		try {
-			List<String> spanishLocales = new ArrayList<>();
-			spanishLocales.add("es");
-			spanishLocales.add("ca");
-			spanishLocales.add("gn");
-			
-			List<String> spanishSingersToNotRemove = new ArrayList<>();
-			spanishSingersToNotRemove.add("Manu Chao");
+  public static boolean isSpanish(String songName, List<Artist> artistList) {
+    DetectLanguage.apiKey = LANGUAGE_DETECTOR_KEY;
+    // https://github.com/detectlanguage/detectlanguage-java
 
-			List<Result> resultsSongName;
-			resultsSongName = DetectLanguage.detect(songName);
-			if (resultsSongName.isEmpty()) return false;
-			Result resultSongName = resultsSongName.get(0);
+    try {
+      List<String> spanishLocales = new ArrayList<>();
+      spanishLocales.add("es");
+      spanishLocales.add("ca");
+      spanishLocales.add("gn");
 
-			if (spanishLocales.contains(resultSongName.language)) {
-				return true;
-			}
+      List<String> spanishSingersToNotRemove = new ArrayList<>();
+      spanishSingersToNotRemove.add("Manu Chao");
 
-			for (Artist artist : artistList) {
-				List<Result> resultsArtistName;
-				resultsArtistName = DetectLanguage.detect(artist.getArtistName());
+      List<Result> resultsSongName;
+      resultsSongName = DetectLanguage.detect(songName);
+      if (resultsSongName.isEmpty()) {
+        return false;
+      }
+      Result resultSongName = resultsSongName.get(0);
 
-				if (resultsArtistName.isEmpty() || spanishSingersToNotRemove.contains(artist.getArtistName()))
-					break;
-				Result resultArtistName = resultsArtistName.get(0);
+      if (spanishLocales.contains(resultSongName.language)) {
+        return true;
+      }
 
-				if (spanishLocales.contains(resultArtistName.language)) {
-					return true;
-				}
-			}
-		} catch (APIError e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
-			return false;
-		}
-		return false;
-	}
+      for (Artist artist : artistList) {
+        List<Result> resultsArtistName;
+        resultsArtistName = DetectLanguage.detect(artist.getArtistName());
 
-	public static void removeSpanishSongs(Set<Track> recs) {
-		Set<Track> trackSet = new HashSet<Track>();
-        for (Track track : recs) {
-        	if (!LanguageHelper.isSpanish(track.getSongName(), track.artistList())) {
-        		trackSet.add(track);
-        	}
+        if (resultsArtistName.isEmpty() || spanishSingersToNotRemove.contains(
+            artist.getArtistName())) {
+          break;
         }
+        Result resultArtistName = resultsArtistName.get(0);
 
-        recs.clear();
-        recs.addAll(trackSet);
-	}
+        if (spanishLocales.contains(resultArtistName.language)) {
+          return true;
+        }
+      }
+    } catch (APIError e) {
+      LOGGER.log(Level.SEVERE, e.getMessage(), e);
+      return false;
+    }
+    return false;
+  }
+
+  public static void removeSpanishSongs(Set<Track> recs) {
+    Set<Track> trackSet = new HashSet<Track>();
+    for (Track track : recs) {
+      if (!LanguageHelper.isSpanish(track.getSongName(), track.artistList())) {
+        trackSet.add(track);
+      }
+    }
+
+    recs.clear();
+    recs.addAll(trackSet);
+  }
 }

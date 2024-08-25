@@ -5,24 +5,25 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Artist {
-    private String artistId;
-    private String artistName;
 
-    @JsonProperty("id")
-    public String getArtistId() {
-        return artistId;
-    }
+  private String artistId;
+  private String artistName;
 
-    public void setArtistId(String artistId) {
-        this.artistId = artistId;
-    }
+  @JsonProperty("id")
+  public String getArtistId() {
+    return artistId;
+  }
 
-    @JsonProperty("name")
-    public String getArtistName() {
-        return artistName;
-    }
+  public void setArtistId(String artistId) {
+    this.artistId = artistId;
+  }
 
-    public void setArtistName(String artistName) {
-        this.artistName = artistName;
-    }
+  @JsonProperty("name")
+  public String getArtistName() {
+    return artistName;
+  }
+
+  public void setArtistName(String artistName) {
+    this.artistName = artistName;
+  }
 }

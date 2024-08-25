@@ -6,14 +6,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserProfileDTO {
 
-    private String userId;
+  private String userId;
 
-    @JsonProperty("id")
-    public String getUserId() {
-        return userId;
-    }
+  @JsonProperty("id")
+  public String getUserId() {
+    return userId;
+  }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
+  public void setUserId(String userId) {
+    this.userId = userId;
+  }
 }

@@ -5,14 +5,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PlaylistTrack {
-    private String totalSongs;
 
-    @JsonProperty("total")
-    public String getTotalSongs() {
-        return totalSongs;
-    }
+  private String totalSongs;
 
-    public void setTotalSongs(String totalSongs) {
-        this.totalSongs = totalSongs;
-    }
+  @JsonProperty("total")
+  public String getTotalSongs() {
+    return totalSongs;
+  }
+
+  public void setTotalSongs(String totalSongs) {
+    this.totalSongs = totalSongs;
+  }
 }

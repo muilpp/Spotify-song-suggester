@@ -5,24 +5,25 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Token {
-    private String accessToken;
-    private String refreshToken;
 
-    @JsonProperty("access_token")
-    public String getAccessToken() {
-        return accessToken;
-    }
+  private String accessToken;
+  private String refreshToken;
 
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
+  @JsonProperty("access_token")
+  public String getAccessToken() {
+    return accessToken;
+  }
 
-    @JsonProperty("refresh_token")
-    public String getRefreshToken() {
-        return refreshToken;
-    }
+  public void setAccessToken(String accessToken) {
+    this.accessToken = accessToken;
+  }
 
-    public void setRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
-    }
+  @JsonProperty("refresh_token")
+  public String getRefreshToken() {
+    return refreshToken;
+  }
+
+  public void setRefreshToken(String refreshToken) {
+    this.refreshToken = refreshToken;
+  }
 }

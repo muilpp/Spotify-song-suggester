@@ -1,7 +1,6 @@
 package xyz.spotifyrecommender.model;
 
 import java.util.List;
-
 import xyz.spotifyrecommender.model.webservicedata.PlaylistDTO;
 import xyz.spotifyrecommender.model.webservicedata.RecommendationDTO;
 import xyz.spotifyrecommender.model.webservicedata.Token;
@@ -9,54 +8,50 @@ import xyz.spotifyrecommender.model.webservicedata.TopTracksDTO;
 import xyz.spotifyrecommender.model.webservicedata.TrackURI;
 
 public interface SpotifyAPI {
-    public TopTracksDTO getTopTracks(String bearer, String avoidSpanishMusic, String isShortTerm);
 
-    public String getPlaylistId();
+  TopTracksDTO getTopTracks(String bearer, String avoidSpanishMusic, String isShortTerm);
 
-    public PlaylistDTO getUserPlaylists();
+  String getPlaylistId();
 
-    public String getUserId(String bearer);
+  PlaylistDTO getUserPlaylists();
 
-    public String createPlaylist(final String userId);
+  String getUserId(String bearer);
 
-    public int replaceOldSongsInPlaylist(String userId, String playlistId,
-            final TrackURI trackURI);
+  String createPlaylist(final String userId);
 
-    public int addNewSongsToPlaylist(String userId, String playlistId, TrackURI trackURI);
+  int replaceOldSongsInPlaylist(String userId, String playlistId,
+      final TrackURI trackURI);
 
-    public List<TrackURI> createUriTrackList(RecommendationDTO recs);
+  int addNewSongsToPlaylist(String userId, String playlistId, TrackURI trackURI);
 
-    /**
-     * Requests an access token and a refresh token for the user
-     * 
-     * @param authorizationCode
-     * @return a Token with the access, refresh and expiration time if authCode
-     *         works, empty Token otherwise
-     */
-    public Token requestToken(String authorizationCode);
+  List<TrackURI> createUriTrackList(RecommendationDTO recs);
 
-    /**
-     * Request a new access token when the current one is expired
-     * 
-     * @param userName
-     * @param refreshToken
-     * @return a new Token with the access if refreshToken works, empty Token
-     *         otherwise
-     */
-    public Token refreshToken(String userName, String refreshToken);
+  /**
+   * Requests an access token and a refresh token for the user
+   *
+   * @return a Token with the access, refresh and expiration time if authCode works, empty Token
+   * otherwise
+   */
+  Token requestToken(String authorizationCode);
 
-    /**
-     * Request the profile user name
-     * 
-     * @return the user name if found
-     */
-    public String getSpotifyUserName();
+  /**
+   * Request a new access token when the current one is expired
+   *
+   * @return a new Token with the access if refreshToken works, empty Token otherwise
+   */
+  Token refreshToken(String userName, String refreshToken);
 
-    /**
-     * Returns a bunch of songs recommended from Spotify
-     * 
-     * @param songIdList
-     * @return the list of songs wrapped in the RecommendationDTO
-     */
-    public RecommendationDTO getRecommendations(List<String> songIdList, String avoidSpanishMusic);
+  /**
+   * Request the profile user name
+   *
+   * @return the user name if found
+   */
+  String getSpotifyUserName();
+
+  /**
+   * Returns a bunch of songs recommended from Spotify
+   *
+   * @return the list of songs wrapped in the RecommendationDTO
+   */
+  RecommendationDTO getRecommendations(List<String> songIdList, String avoidSpanishMusic);
 }

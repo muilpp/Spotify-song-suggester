@@ -6,57 +6,58 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PlaylistItem {
-    private String playlistName;
-    private String playlistId;
-    private boolean isPublic;
-    private PlaylistTrack playListTracks;
 
-    public PlaylistItem() {
-        //A no-arg constructor is needed to instantiate the object
-    }
+  private String playlistName;
+  private String playlistId;
+  private boolean isPublic;
+  private PlaylistTrack playListTracks;
 
-    public PlaylistItem(String name, boolean isPublic) {
-        playlistName = name;
-        this.isPublic = isPublic;
-    }
+  public PlaylistItem() {
+    //A no-arg constructor is needed to instantiate the object
+  }
 
-    @JsonProperty("name")
-    public String getPlaylistName() {
-        return playlistName;
-    }
+  public PlaylistItem(String name, boolean isPublic) {
+    playlistName = name;
+    this.isPublic = isPublic;
+  }
 
-    public void setPlaylistName(String playlistName) {
-        this.playlistName = playlistName;
-    }
+  @JsonProperty("name")
+  public String getPlaylistName() {
+    return playlistName;
+  }
 
-    // This is to prevent serialization of playlistId, since it will only be
-    // deserialized, always.
-    @JsonIgnore
-    public String getPlaylistId() {
-        return playlistId;
-    }
+  public void setPlaylistName(String playlistName) {
+    this.playlistName = playlistName;
+  }
 
-    @JsonProperty("id")
-    public void setPlaylistId(String playlistId) {
-        this.playlistId = playlistId;
-    }
+  // This is to prevent serialization of playlistId, since it will only be
+  // deserialized, always.
+  @JsonIgnore
+  public String getPlaylistId() {
+    return playlistId;
+  }
 
-    @JsonProperty("public")
-    public boolean isPublic() {
-        return isPublic;
-    }
+  @JsonProperty("id")
+  public void setPlaylistId(String playlistId) {
+    this.playlistId = playlistId;
+  }
 
-    public void setPublic(boolean isPublic) {
-        this.isPublic = isPublic;
-    }
+  @JsonProperty("public")
+  public boolean isPublic() {
+    return isPublic;
+  }
 
-    @JsonIgnore
-    public PlaylistTrack getPlayListTracks() {
-        return playListTracks;
-    }
+  public void setPublic(boolean isPublic) {
+    this.isPublic = isPublic;
+  }
 
-    @JsonProperty("tracks")
-    public void setPlayListTracks(PlaylistTrack playListTracks) {
-        this.playListTracks = playListTracks;
-    }
+  @JsonIgnore
+  public PlaylistTrack getPlayListTracks() {
+    return playListTracks;
+  }
+
+  @JsonProperty("tracks")
+  public void setPlayListTracks(PlaylistTrack playListTracks) {
+    this.playListTracks = playListTracks;
+  }
 }

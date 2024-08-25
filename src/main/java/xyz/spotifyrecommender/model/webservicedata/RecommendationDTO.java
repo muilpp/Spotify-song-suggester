@@ -1,48 +1,48 @@
 package xyz.spotifyrecommender.model.webservicedata;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RecommendationDTO {
-    private Set<Track> trackSet;
-    private boolean success;
-    private String message;
 
-    public RecommendationDTO() {
-        trackSet = new HashSet<>();
-    }
+  private Set<Track> trackSet;
+  private boolean success;
+  private String message;
 
-    public RecommendationDTO(boolean succes, String message) {
-        this.setSuccess(succes);
-        this.message = message;
-    }
+  public RecommendationDTO() {
+    trackSet = new HashSet<>();
+  }
 
-    @JsonProperty("tracks")
-    public Set<Track> getTrackSet() {
-        return trackSet;
-    }
+  public RecommendationDTO(boolean succes, String message) {
+    this.setSuccess(succes);
+    this.message = message;
+  }
 
-    public void setTrackList(Set<Track> trackSet) {
-        this.trackSet = trackSet;
-    }
+  @JsonProperty("tracks")
+  public Set<Track> getTrackSet() {
+    return trackSet;
+  }
 
-    public String getMessage() {
-        return message;
-    }
+  public void setTrackList(Set<Track> trackSet) {
+    this.trackSet = trackSet;
+  }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+  public String getMessage() {
+    return message;
+  }
 
-    public boolean isSuccess() {
-        return success;
-    }
+  public void setMessage(String message) {
+    this.message = message;
+  }
 
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
+  public boolean isSuccess() {
+    return success;
+  }
+
+  public void setSuccess(boolean success) {
+    this.success = success;
+  }
 }
