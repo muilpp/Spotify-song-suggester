@@ -8,7 +8,7 @@ import static xyz.spotifyrecommender.model.Constant.DEFAULT_ACCESS_REVOKED;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,18 +24,13 @@ import xyz.spotifyrecommender.model.webservicedata.Token;
 
 @RestController
 @RequestMapping("/suggest")
+@RequiredArgsConstructor
 public class SuggestController {
 
     private static final Logger LOGGER = Logger.getLogger(SuggestController.class.getName());
-
-    @Autowired
-    private Suggest suggest;
-
-    @Autowired
-    private SpotifyAPI spotifyAPI;
-
-    @Autowired
-    private UserDAO userDAO;
+    private final Suggest suggest;
+    private final SpotifyAPI spotifyAPI;
+    private final UserDAO userDAO;
 
     @RequestMapping(value = "/{authorizationCode}", method = RequestMethod.GET)
     public RecommendationDTO getSuggestions(@PathVariable("authorizationCode") String authorizationCode) {

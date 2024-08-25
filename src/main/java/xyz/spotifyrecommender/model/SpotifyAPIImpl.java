@@ -269,8 +269,8 @@ public class SpotifyAPIImpl implements SpotifyAPI {
             userDAO.updateUserLastRefresh(userName, LocalDateTime.now());
             return response.getBody();
         } else {
-            LOGGER.info("Failed : HTTP error code -> " + response.getStatusCodeValue());
-            LOGGER.info(response.getStatusCode().getReasonPhrase());
+            LOGGER.info("Failed : HTTP error code -> " + response.getStatusCode());
+            LOGGER.info(response.toString());
 
             // user revoked access to his account, let's write it in the DB
             userDAO.updateUserAccess(userName, USER_ACCESS_REVOKED, null, null);
@@ -352,8 +352,8 @@ public class SpotifyAPIImpl implements SpotifyAPI {
                 RecommendationDTO recDTO = response.getBody();
                 return recDTO.getTrackSet();
             } else {
-                LOGGER.info("Failed : HTTP error code : " + response.getStatusCodeValue());
-                LOGGER.info(response.getStatusCode().getReasonPhrase());
+                LOGGER.info("Failed : HTTP error code : " + response.getStatusCode());
+                LOGGER.info(response.toString());
                 return Collections.emptySet();
             }
         }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 
@@ -15,19 +16,15 @@ import xyz.spotifyrecommender.model.database.User;
 import xyz.spotifyrecommender.model.database.UserDAO;
 import xyz.spotifyrecommender.model.webservicedata.Token;
 
+@RequiredArgsConstructor
 public class UserSongsJob {
 	private static final Logger LOGGER = Logger.getLogger(UserSongsJob.class.getName());
 
-	@Autowired
-	SpotifyAPI spotifyAPI;
+	private final SpotifyAPI spotifyAPI;
+	private final UserDAO userDAO;
+	private final Suggest suggest;
 
-	@Autowired
-	UserDAO userDAO;
-
-	@Autowired
-	Suggest suggest;
-
-    @Scheduled(cron = "0 0 5 * * SUN")
+	@Scheduled(cron = "0 0 5 * * SUN")
 	public void execute() {
 		List<User> userList = userDAO.getUsers();
 		LOGGER.log(Level.INFO, "execute job, user list size -> [{0}]", userList.size());
