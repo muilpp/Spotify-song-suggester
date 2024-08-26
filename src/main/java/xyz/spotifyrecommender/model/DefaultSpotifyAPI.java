@@ -52,7 +52,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import xyz.spotifyrecommender.model.database.UserDAO;
+import xyz.spotifyrecommender.model.database.UserStore;
 import xyz.spotifyrecommender.model.errorhandler.ErrorHandlerAccessRevoked;
 import xyz.spotifyrecommender.model.errorhandler.ErrorHandlerGeneral;
 import xyz.spotifyrecommender.model.helper.LanguageHelper;
@@ -71,11 +71,11 @@ import xyz.spotifyrecommender.model.webservicedata.UserProfileDTO;
 
 @Service
 @RequiredArgsConstructor
-public class SpotifyAPIImpl implements SpotifyAPI {
+public class DefaultSpotifyAPI implements SpotifyAPI {
 
-  private static final Logger LOGGER = Logger.getLogger(SpotifyAPIImpl.class.getName());
+  private static final Logger LOGGER = Logger.getLogger(DefaultSpotifyAPI.class.getName());
 
-  private final UserDAO userDAO;
+  private final UserStore userStore;
   private final RestTemplate restTemplate;
 
   @Bean
@@ -281,14 +281,14 @@ public class SpotifyAPIImpl implements SpotifyAPI {
     restTemplate.getInterceptors()
         .removeIf(s -> s.getClass().equals(LoggingRequestInterceptor.class));
     if (response.getStatusCode() == HttpStatus.OK) {
-      userDAO.updateUserLastRefresh(userName, LocalDateTime.now());
+      userStore.updateUserLastRefresh(userName, LocalDateTime.now());
       return response.getBody();
     } else {
       LOGGER.info("Failed : HTTP error code -> " + response.getStatusCode());
       LOGGER.info(response.toString());
 
       // user revoked access to his account, let's write it in the DB
-      userDAO.updateUserAccess(userName, USER_ACCESS_REVOKED, null, null);
+      userStore.updateUserAccess(userName, USER_ACCESS_REVOKED, null, null);
     }
 
     return new Token();

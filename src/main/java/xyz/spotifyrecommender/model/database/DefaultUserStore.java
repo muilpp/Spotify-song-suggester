@@ -15,9 +15,9 @@ import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class UserDAOImpl implements UserDAO {
+public class DefaultUserStore implements UserStore {
 
-  private static final Logger LOGGER = Logger.getLogger(UserDAO.class.getName());
+  private static final Logger LOGGER = Logger.getLogger(UserStore.class.getName());
   private static final String USER_NAME_PLACEHOLDER = "userName";
 
   @Override

@@ -9,13 +9,14 @@ import com.google.common.base.Strings;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import xyz.spotifyrecommender.model.SpotifyAPI;
 import xyz.spotifyrecommender.model.SuggestService;
-import xyz.spotifyrecommender.model.database.UserDAO;
+import xyz.spotifyrecommender.model.database.User;
+import xyz.spotifyrecommender.model.database.UserStore;
 import xyz.spotifyrecommender.model.webservicedata.RecommendationDTO;
 import xyz.spotifyrecommender.model.webservicedata.Token;
 
@@ -27,9 +28,9 @@ public class SuggestController {
   private static final Logger LOGGER = Logger.getLogger(SuggestController.class.getName());
   private final SuggestService suggestService;
   private final SpotifyAPI spotifyAPI;
-  private final UserDAO userDAO;
+  private final UserStore userStore;
 
-  @RequestMapping(value = "/{authorizationCode}", method = RequestMethod.GET)
+  @GetMapping("/{authorizationCode}")
   public RecommendationDTO getSuggestions(
       @PathVariable("authorizationCode") String authorizationCode) {
 
@@ -45,10 +46,10 @@ public class SuggestController {
           return new RecommendationDTO(false, AUTHENTICATION_PROBLEM);
       }
 
-      if (!userDAO.userExists(userName)) {
-          userDAO.addUser(userName, authToken.getAccessToken(), authToken.getRefreshToken());
+      if (!userStore.userExists(userName)) {
+          userStore.addUser(userName, authToken.getAccessToken(), authToken.getRefreshToken());
       } else {
-          userDAO.updateUserAccess(userName, DEFAULT_ACCESS_REVOKED, authToken.getAccessToken(),
+          userStore.updateUserAccess(userName, DEFAULT_ACCESS_REVOKED, authToken.getAccessToken(),
               authToken.getRefreshToken());
       }
 
@@ -56,5 +57,17 @@ public class SuggestController {
 
     return suggestService.getRecommendations(authToken, DEFAULT_AVOID_SPANISH_MUSIC,
         DEFAULT_SHORT_TERM_TRACKS);
+  }
+
+  @GetMapping("/user/{userName}")
+  public void getSuggestionsForUser(@PathVariable("userName") String userName) {
+    User user = userStore.getUser(userName);
+    LOGGER.log(Level.INFO, "manual update for user -> [{0}]", user.getUserName());
+    Token userToken = spotifyAPI.refreshToken(user.getUserName(), user.getRefreshToken());
+
+    if (!Strings.isNullOrEmpty(userToken.getAccessToken())) {
+      suggestService.getRecommendations(userToken, user.getAvoidSpanishMusic(),
+          user.getShortTermTracks());
+    }
   }
 }

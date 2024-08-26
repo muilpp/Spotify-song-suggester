@@ -155,6 +155,7 @@
   </properties>
 
   <build>
+    <finalName>SpotifySuggest</finalName>
     <pluginManagement>
       <plugins>
         <plugin>

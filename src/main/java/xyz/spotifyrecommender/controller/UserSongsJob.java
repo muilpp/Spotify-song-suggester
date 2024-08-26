@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import xyz.spotifyrecommender.model.SpotifyAPI;
 import xyz.spotifyrecommender.model.SuggestService;
 import xyz.spotifyrecommender.model.database.User;
-import xyz.spotifyrecommender.model.database.UserDAO;
+import xyz.spotifyrecommender.model.database.UserStore;
 import xyz.spotifyrecommender.model.webservicedata.Token;
 
 @RequiredArgsConstructor
@@ -18,12 +18,12 @@ public class UserSongsJob {
   private static final Logger LOGGER = Logger.getLogger(UserSongsJob.class.getName());
 
   private final SpotifyAPI spotifyAPI;
-  private final UserDAO userDAO;
+  private final UserStore userStore;
   private final SuggestService suggestService;
 
   @Scheduled(cron = "0 0 5 * * SUN")
   public void execute() {
-    List<User> userList = userDAO.getUsers();
+    List<User> userList = userStore.getUsers();
     LOGGER.log(Level.INFO, "execute job, user list size -> [{0}]", userList.size());
 
     for (User user : userList) {
@@ -48,6 +48,6 @@ public class UserSongsJob {
   @Scheduled(cron = "0 0 */3 * * *")
   public void avoidConnectionDrop() {
     LOGGER.info("Execute sql select to avoid connection drop");
-    userDAO.getUsers();
+    userStore.getUsers();
   }
 }

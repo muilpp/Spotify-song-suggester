@@ -3,7 +3,7 @@ package xyz.spotifyrecommender.model.database;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface UserDAO {
+public interface UserStore {
 
   /**
    * Method to CREATE a new user in the database
